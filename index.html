@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESG Greenwashing Detector</title>
+    <title>ESG Greenwashing Detection & Credibility System</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -530,4 +530,110 @@ function runAnalysis() {
                   : {level: "High", color: "var(--risk-high)", bg: "#ffebee"};
 
     // ─── Chart ───────────────────────────────────────────────
-    const ctx = document.getElementById('cred
+    const ctx = document.getElementById('credibility-chart').getContext('2d');
+    if (credChart) credChart.destroy();
+    credChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['Consistency', 'Evidence', 'Trend', 'Transparency', 'Sector Penalty', 'Country Factor', 'Grid Intensity'],
+            datasets: [{
+                label: 'Credibility Components (2025 context)',
+                data: [consistency, evidence, trend, transparency, -(sectorRiskFloor[sector]||0), multiplier*12, -gridIntensity*55],
+                backgroundColor: 'rgba(52, 152, 219, 0.18)',
+                borderColor: '#3498db',
+                borderWidth: 2.5,
+                pointBackgroundColor: '#3498db'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: { r: { min: -60, max: 60, ticks: { stepSize: 10 } } },
+            plugins: { title: { display: true, text: `ESG Credibility Breakdown – ${year}` } }
+        }
+    });
+
+    // ─── Badge ───────────────────────────────────────────────
+    document.getElementById('risk-badge').style.cssText = `
+        background: ${risk.bg};
+        color: ${risk.color};
+    `;
+    document.getElementById('risk-badge').textContent = `Credibility: ${score}% (${risk.level} Risk)`;
+
+    // ─── Insights ────────────────────────────────────────────
+    document.getElementById('insights').innerHTML = `
+        <strong>Sector:</strong> ${sector}<br>
+        <strong>Reporting Year:</strong> ${year}<br>
+        <strong>Detected Country:</strong> ${country}<br>
+        <strong>ESG Credibility Score:</strong> ${score}%<br>
+        <strong>Red Flags Detected:</strong> ${mismatches.length}<br>
+        <strong>Country Regulation Multiplier:</strong> ×${multiplier.toFixed(2)} (${country} context)<br>
+        <strong>Grid Carbon Intensity:</strong> ${gridIntensity.toFixed(3)} kg CO₂/kWh<br>
+    `;
+
+    // ─── Red Flags ───────────────────────────────────────────
+    let flagsHtml = '<h3>Red Flags & Evidence</h3><ul>';
+    mismatches.forEach(m => {
+        flagsHtml += `<li><strong>${m.type}</strong> (Confidence: ${(m.confidence * 100).toFixed(0)}%)<br>Evidence: ${m.evidence || "Operational data shows misalignment in 2025 context"}</li>`;
+    });
+    if (mismatches.length === 0) flagsHtml += '<li style="color:#27ae60;">No major red flags detected — strong internal alignment observed.</li>';
+    flagsHtml += '</ul>';
+    document.getElementById('red-flags').innerHTML = flagsHtml;
+
+    // ─── Claim Analysis (sentence-level) ─────────────────────
+    let claimHtml = '<h3>Detailed Claim Analysis</h3>';
+    const sentences = claimsText.split(/(?<=[.!?])\s+/).filter(s => s.trim());
+    sentences.forEach(s => {
+        let matched = parsedClaims.find(c => c.keywords.some(k => s.toLowerCase().includes(k)));
+        let className = '';
+        let extra = '';
+        if (matched) {
+            const isMismatch = mismatches.some(m => m.type === matched.type);
+            className = isMismatch ? 'claim-red' : 'claim-highlight';
+            extra = ` — ${matched.type} (${(matched.confidence*100).toFixed(0)}%)`;
+        }
+        claimHtml += `<p class="${className}">${s.trim()}${extra}</p>`;
+    });
+    document.getElementById('claim-analysis').innerHTML = claimHtml;
+
+    // ─── Auditor Summary ─────────────────────────────────────
+    let summary = `<h3>Auditor's Professional Commentary (${year})</h3>
+    <p>This assessment — based on provided claims and operational metrics — indicates <strong>${risk.level.toLowerCase()} credibility alignment</strong> for a ${sector.toLowerCase()} company located in ${country}.</p>
+    <p>Key observations in ${year} context:</p>
+    <ul>
+        <li>Score of <strong>${score}%</strong> reflects partial to moderate consistency between reported ambitions and actual performance.</li>
+        <li>${mismatches.length} red flag${mismatches.length !== 1 ? 's' : ''} identified, primarily related to ${mismatches.map(m => m.type).join(', ') || 'none'}.</li>
+        <li>${country} / ${country === "Norway" || country.startsWith("EU") ? "EU" : "regional"} regulatory environment (multiplier ×${multiplier.toFixed(2)}) and grid intensity (${gridIntensity.toFixed(3)} kg CO₂/kWh) add context-specific pressure under CSRD, national climate laws, and 2025 compliance deadlines.</li>
+    </ul>
+    <p><strong>Recommendation:</strong> Prioritize third-party verification of Scope 1–3 emissions, improve maintenance data transparency, and align asset replacement cycles more closely with stated lifetime extension goals to reduce regulatory and reputational exposure in the current tightening framework.</p>`;
+    document.getElementById('auditor-summary').innerHTML = summary;
+
+    // ─── Map ─────────────────────────────────────────────────
+    if (map) map.remove();
+    map = L.map('map').setView([lat, lon], 6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    L.marker([lat, lon]).addTo(map)
+        .bindPopup(`<b>${sector}</b><br>Credibility: ${score}% (${risk.level} Risk)<br>Country: ${country}<br>Year: ${year}`).openPopup();
+
+    // Optional: add realistic industrial zones
+    if (country === "Germany") {
+        L.circle([51.1657, 10.4515], {color: "orange", radius: 250000}).addTo(map)
+            .bindPopup("Central Germany — Heavy Industry Zone (2025 context)");
+    }
+}
+
+// ────────────────────────────────────────────────
+// Helpers
+// ────────────────────────────────────────────────
+
+function classifyRisk(score) {
+    if (score > 78) return {level: "Low", color: "var(--risk-low)", bg: "#e8f5e9"};
+    if (score > 52) return {level: "Moderate", color: "var(--risk-mod)", bg: "#fff3e0"};
+    return {level: "High", color: "var(--risk-high)", bg: "#ffebee"};
+}
+
+</script>
+
+</body>
+</html>
