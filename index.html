@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESG Greenwashing Detector</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        :root {
+            --bg-color: #f5f7fa;
+            --panel-bg: rgba(255,255,255,0.85);
+            --text-color: #333;
+            --accent-color: #3498db;
+            --risk-low: #27ae60;
+            --risk-mod: #f39c12;
+            --risk-high: #c0392b;
+        }
+
+        body.dark {
+            --bg-color: #1e1e1e;
+            --panel-bg: rgba(30,30,30,0.85);
+            --text-color: #ddd;
+            --accent-color: #5dade2;
+            --risk-low: #2ecc71;
+            --risk-mod: #f1c40f;
+            --risk-high: #e74c3c;
+        }
+
+        body.colorful {
+            --bg-color: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            --panel-bg: rgba(255,255,255,0.7);
+            --text-color: #2c3e50;
+            --accent-color: #e67e22;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background: var(--panel-bg);
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        h1 { margin: 0; color: var(--text-color); }
+        h2 { color: var(--text-color); }
+        h3 { color: var(--text-color); opacity: 0.8; margin-bottom: 8px; }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .section {
+            margin-bottom: 22px;
+        }
+
+        select, input[type="number"], input[type="text"], textarea, button {
+            width: 100%;
+            padding: 10px 12px;
+            margin-top: 6px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box;
+            background: white;
+            color: #333;
+        }
+
+        textarea {
+            height: 100px;
+        }
+
+        select[multiple] {
+            height: 150px; /* Adjust height for multi-select */
+        }
+
+        body.dark select, body.dark input[type="number"], body.dark input[type="text"], body.dark textarea {
+            background: #333;
+            color: #ddd;
+            border-color: #555;
+        }
+
+        button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        #protection-options label {
+            display: block;
+            margin: 6px 0;
+            font-size: 14px;
+        }
+
+        canvas {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            max-width: 100%;
+            height: auto;
+        }
+
+        body.dark canvas {
+            background: #2c2c2c;
+            border-color: #444;
+        }
+
+        #risk-badge {
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            padding: 12px;
+            border-radius: 12px;
+            background: #ecf0f1;
+        }
+
+        body.dark #risk-badge {
+            background: #3a3a3a;
+        }
+
+        #insights {
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .comparison-charts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .comparison-charts canvas {
+            flex: 1 1 300px;
+            max-height: 380px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f8f9fa;
+        }
+
+        body.dark th {
+            background: #444;
+        }
+
+        body.dark td {
+            border-color: #555;
+        }
+
+        #comparison-selectors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        #comparison-selectors .section {
+            flex: 1 1 200px;
+            min-width: 0;
+        }
+
+        #maintenance-schedule {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        body.dark #maintenance-schedule {
+            background: #333;
+        }
+
+        #export-buttons {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        #export-buttons button {
+            flex: 1;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        #map {
+            height: 300px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🔍 ESG Greenwashing Detection & Credibility System</h1>
+    <p>Data-Driven Alignment Assessment for Sustainability Claims</p>
+    <div class="section">
+        <label for="theme-select">Dashboard Theme:</label>
+        <select id="theme-select">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="colorful">Colorful</option>
+        </select>
+    </div>
+</header>
+
+<div class="container">
+
+    <!-- INPUT PANEL -->
+    <div class="panel" id="input-panel">
+        <h2>Inputs</h2>
+
+        <div class="section">
+            <h3 class="tooltip">🏭 Company Sector <span class="tooltiptext">Select industry sector for relevant ESG checks.</span></h3>
+            <select id="sector-select">
+                <option>Oil & Gas</option>
+                <option>Offshore Wind & Marine</option>
+                <option>Construction & Infrastructure</option>
+                <option>Heavy Industry & Manufacturing</option>
+                <option>Real Estate & Facilities</option>
+            </select>
+        </div>
+
+        <div class="section">
+            <h3 class="tooltip">📝 ESG Claims <span class="tooltiptext">Enter ESG report claims (e.g., "Reduced emissions by 30%").</span></h3>
+            <textarea id="esg-claims" placeholder="Enter ESG claims from reports..."></textarea>
+        </div>
+
+        <div class="section">
+            <h3 class="tooltip">⚙️ Operational Data <span class="tooltiptext">Enter operational metrics (JSON format).</span></h3>
+            <textarea id="operational-data" placeholder='{"energyUse": 5000, "maintenanceFrequency": 4, "assetReplacementFrequency": 2, "downtimeEvents": 3, "assetAge": 10}'></textarea>
+        </div>
+
+        <div class="section">
+            <h3 class="tooltip">🌍 Asset Location <span class="tooltiptext">Enter latitude, longitude for map view.</span></h3>
+            <input type="text" id="asset-location" value="59.9139,10.7522" placeholder="Lat, Lon (e.g., 59.9139,10.7522 for Oslo)">
+        </div>
+
+        <button id="analyze">Analyze ESG Credibility</button>
+        <button id="reset" style="background: #e74c3c; margin-top: 10px;">Reset Inputs</button>
+    </div>
+
+    <!-- VISUALIZATION PANEL -->
+    <div class="panel">
+        <h2>Credibility Analysis</h2>
+        <canvas id="credibility-chart" height="320"></canvas>
+        <div id="risk-badge">—</div>
+        <div id="insights"></div>
+        <div id="red-flags"></div>
+        <div id="map"></div>
+        <div id="export-buttons">
+            <button id="export-csv">Export Data CSV</button>
+            <button id="export-pdf">Export Report PDF</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// Simulated Data and Logic
+
+// Example ESG claim keywords and operational metrics
+const esgCategories = [
+    {claimType: "emission reduction", keyWords: ["reduced emissions", "lower CO2"], operationalCheck: (data) => data.energyUse < 6000 && data.assetReplacementFrequency < 3},
+    {claimType: "asset lifetime extension", keyWords: ["extend asset lifetime", "longer asset life"], operationalCheck: (data) => data.assetAge > 8 && data.maintenanceFrequency > 3},
+    // Add more categories
+];
+
+const norwayGridIntensity = 0.02; // Low carbon intensity in Norway
+
+// Theme selector
+const themeSel = document.getElementById('theme-select');
+themeSel.addEventListener('change', () => document.body.className = themeSel.value);
+
+// Analyze button
+document.getElementById('analyze').addEventListener('click', runAnalysis);
+
+// Reset
+document.getElementById('reset').addEventListener('click', () => {
+    document.getElementById('esg-claims').value = '';
+    document.getElementById('operational-data').value = '';
+    document.getElementById('asset-location').value = '59.9139,10.7522';
+    document.getElementById('insights').innerHTML = '';
+    document.getElementById('red-flags').innerHTML = '';
+    document.getElementById('risk-badge').textContent = '—';
+    if (credChart) credChart.destroy();
+    if (map) map.remove();
+});
+
+let credChart;
+let map;
+
+function runAnalysis() {
+    const sector = document.getElementById('sector-select').value;
+    const claimsText = document.getElementById('esg-claims').value.toLowerCase();
+    let operational;
+    try {
+        operational = JSON.parse(document.getElementById('operational-data').value);
+    } catch (e) {
+        alert('Invalid operational data JSON');
+        return;
+    }
+    const location = document.getElementById('asset-location').value.split(',').map(Number);
+
+    // Parse claims
+    const parsedClaims = esgCategories.filter(cat => cat.keyWords.some(kw => claimsText.includes(kw)));
+
+    // Mismatch analytics
+    const mismatches = parsedClaims.filter(cat => !cat.operationalCheck(operational));
+
+    // Credibility score
+    const consistency = (parsedClaims.length - mismatches.length) / parsedClaims.length * 100 || 0;
+    const evidence = Object.values(operational).reduce((sum, val) => sum + (val > 0 ? 1 : 0), 0) / 7 * 30;
+    const trend = 20; // Simulated
+    const transparency = 20; // Simulated
+    const score = consistency + evidence + trend + transparency;
+
+    // Risk
+    const riskLevel = score > 80 ? 'Low' : score > 50 ? 'Moderate' : 'High';
+    const riskColor = riskLevel === 'Low' ? '--risk-low' : riskLevel === 'Moderate' ? '--risk-mod' : '--risk-high';
+
+    // Chart
+    const ctx = document.getElementById('credibility-chart').getContext('2d');
+    if (credChart) credChart.destroy();
+    credChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Consistency', 'Evidence', 'Trend', 'Transparency'],
+            datasets: [{
+                data: [consistency, evidence, trend, transparency],
+                backgroundColor: ['#27ae60', '#3498db', '#f39c12', '#e67e22']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {display: true, text: 'ESG Credibility Breakdown'}
+            }
+        }
+    });
+
+    // Badge
+    const badge = document.getElementById('risk-badge');
+    badge.style.background = `var(--${riskColor}-bg)`;
+    badge.style.color = `var(--${riskColor})`;
+    badge.textContent = `Credibility Score: ${score.toFixed(1)}% (${riskLevel} Risk)`;
+
+    // Insights
+    let insights = `<strong>Sector: ${sector}</strong><br>`;
+    insights += `ESG Credibility Score: ${score.toFixed(1)}%<br>`;
+    insights += `Red Flags: ${mismatches.length}<br><br>`;
+    document.getElementById('insights').innerHTML = insights;
+
+    // Red flags
+    let flags = '<h3>Red Flags</h3><ul>';
+    mismatches.forEach(m => flags += `<li>Misalignment in ${m.claimType}</li>`);
+    flags += '</ul>';
+    document.getElementById('red-flags').innerHTML = flags;
+
+    // Map
+    if (map) map.remove();
+    map = L.map('map').setView(location, 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    L.marker(location).addTo(map).bindPopup('Asset Location');
+
+    // Export
+    document.getElementById('export-csv').addEventListener('click', () => exportCSV([{score, riskLevel}]));
+    document.getElementById('export-pdf').addEventListener('click', () => exportPDF(insights, []));
+}
+
+</script>
+
+</body>
+</html>
