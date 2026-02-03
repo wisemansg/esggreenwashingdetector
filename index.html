@@ -35,123 +35,13 @@
             --accent-color: #e67e22;
         }
 
-        body.high-contrast {
-            --bg-color: #ffffff;
-            --panel-bg: #ffffff;
-            --text-color: #000000;
-            --accent-color: #0000ff;
-            --risk-low: #008000;
-            --risk-mod: #ffa500;
-            --risk-high: #ff0000;
-        }
-
-        body.minimal {
-            --bg-color: #f0f0f0;
-            --panel-bg: #ffffff;
-            --text-color: #4a4a4a;
-            --accent-color: #007bff;
-            --risk-low: #28a745;
-            --risk-mod: #ffc107;
-            --risk-high: #dc3545;
-        }
-
-        body.retro {
-            --bg-color: #c0c0c0;
-            --panel-bg: #e0e0e0;
-            --text-color: #000080;
-            --accent-color: #800000;
-            --risk-low: #008000;
-            --risk-mod: #808000;
-            --risk-high: #ff0000;
-        }
-
-        body.nature {
-            --bg-color: #e0f7fa;
-            --panel-bg: rgba(224,247,250,0.85);
-            --text-color: #00695c;
-            --accent-color: #009688;
-            --risk-low: #4caf50;
-            --risk-mod: #ffeb3b;
-            --risk-high: #f44336;
-        }
-
-        body.futuristic {
-            --bg-color: #0a192f;
-            --panel-bg: rgba(45,55,72,0.85);
-            --text-color: #ccd6f6;
-            --accent-color: #64ffda;
-            --risk-low: #00ff00;
-            --risk-mod: #ffff00;
-            --risk-high: #ff0000;
-        }
-
-        body.vintage {
-            --bg-color: #fdfcfb;
-            --panel-bg: rgba(253,252,251,0.85);
-            --text-color: #5f4b32;
-            --accent-color: #a07d5f;
-            --risk-low: #6b8e23;
-            --risk-mod: #cd853f;
-            --risk-high: #8b0000;
-        }
-
-        body.corporate {
-            --bg-color: #f8fafc;
-            --panel-bg: #ffffff;
-            --text-color: #334155;
-            --accent-color: #3b82f6;
-            --risk-low: #22c55e;
-            --risk-mod: #eab308;
-            --risk-high: #ef4444;
-        }
-
-        body.neon {
-            --bg-color: #000000;
-            --panel-bg: rgba(10,10,20,0.85);
-            --text-color: #00ffea;
-            --accent-color: #ff00aa;
-            --risk-low: #00ff00;
-            --risk-mod: #ffff00;
-            --risk-high: #ff0044;
-        }
-
-        body.pastel {
-            --bg-color: #f9f0f5;
-            --panel-bg: rgba(249,240,245,0.85);
-            --text-color: #6b5b95;
-            --accent-color: #c08497;
-            --risk-low: #a8d5ba;
-            --risk-mod: #f7d794;
-            --risk-high: #f4a4a4;
-        }
-
-        body.earth {
-            --bg-color: #e8e2d9;
-            --panel-bg: rgba(232,226,217,0.85);
-            --text-color: #4a3728;
-            --accent-color: #8d5524;
-            --risk-low: #556b2f;
-            --risk-mod: #cd853f;
-            --risk-high: #8b0000;
-        }
-
-        body.ocean {
-            --bg-color: #e0f2f1;
-            --panel-bg: rgba(224,242,241,0.85);
-            --text-color: #006d77;
-            --accent-color: #83c5be;
-            --risk-low: #4caf50;
-            --risk-mod: #ffca28;
-            --risk-high: #e53935;
-        }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-color);
             margin: 0;
             padding: 20px;
             color: var(--text-color);
-            transition: background 0.4s, color 0.4s;
+            transition: all 0.4s ease;
         }
 
         header {
@@ -163,13 +53,13 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
 
-        h1 { margin: 0; color: var(--text-color); }
-        h2 { color: var(--text-color); }
-        h3 { color: var(--text-color); opacity: 0.8; margin-bottom: 8px; }
+        h1, h2, h3 {
+            color: var(--text-color);
+        }
 
         .container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
             gap: 24px;
             max-width: 1800px;
             margin: 0 auto;
@@ -178,42 +68,25 @@
         .panel {
             background: var(--panel-bg);
             border-radius: 12px;
-            padding: 20px;
+            padding: 24px;
             box-shadow: 0 6px 25px rgba(0,0,0,0.1);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.4);
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
-        .section {
-            margin-bottom: 22px;
-        }
-
-        select, input[type="number"], input[type="text"], textarea, button {
+        select, input, textarea, button {
             width: 100%;
-            padding: 10px 12px;
-            margin-top: 6px;
-            border: 1px solid #ddd;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
             border-radius: 6px;
             font-size: 15px;
             box-sizing: border-box;
-            background: white;
-            color: #333;
-            transition: all 0.2s;
         }
 
         textarea {
-            height: 100px;
+            height: 120px;
             resize: vertical;
-        }
-
-        select[multiple] {
-            height: 150px;
-        }
-
-        body.dark select, body.dark input, body.dark textarea {
-            background: #333;
-            color: #ddd;
-            border-color: #555;
         }
 
         button {
@@ -221,25 +94,23 @@
             color: white;
             border: none;
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
+            font-weight: bold;
         }
 
         button:hover {
             opacity: 0.9;
-            transform: translateY(-1px);
         }
 
         #analyze {
             background: #10b981;
-            padding: 14px;
             font-size: 16px;
+            padding: 14px;
         }
 
         #reset {
             background: #ef4444;
-            padding: 14px;
             font-size: 16px;
+            padding: 14px;
         }
 
         canvas {
@@ -247,23 +118,21 @@
             border-radius: 8px;
             border: 1px solid #eee;
             max-width: 100%;
-            height: auto;
         }
 
         body.dark canvas {
             background: #2c2c2c;
-            border-color: #444;
+            border-color: #555;
         }
 
         #risk-badge {
-            font-size: 32px;
+            font-size: 2.2rem;
             font-weight: bold;
             text-align: center;
             margin: 20px 0;
-            padding: 12px;
+            padding: 16px;
             border-radius: 12px;
             background: #ecf0f1;
-            transition: all 0.3s;
         }
 
         body.dark #risk-badge {
@@ -273,6 +142,7 @@
         #insights, #red-flags, #claim-analysis, #auditor-summary {
             line-height: 1.6;
             font-size: 15px;
+            margin: 16px 0;
         }
 
         .claim-highlight {
@@ -288,36 +158,35 @@
         }
 
         #map {
-            height: 300px;
-            border-radius: 8px;
+            height: 340px;
+            border-radius: 12px;
+            margin: 24px 0;
             border: 1px solid #eee;
-            margin-top: 20px;
         }
 
         #export-buttons {
-            margin-top: 15px;
+            margin-top: 24px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
         #export-buttons button {
             flex: 1;
             min-width: 160px;
-            padding: 12px;
+            padding: 14px;
             font-size: 15px;
         }
 
         .tooltip {
             position: relative;
-            display: inline-block;
             cursor: help;
         }
 
         .tooltip .tooltiptext {
             visibility: hidden;
             width: 220px;
-            background-color: #555;
+            background: #555;
             color: #fff;
             text-align: center;
             border-radius: 6px;
@@ -335,95 +204,15 @@
             visibility: visible;
             opacity: 1;
         }
-
-        #protection-options label {
-            display: block;
-            margin: 6px 0;
-            font-size: 14px;
-        }
-
-        .comparison-charts {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .comparison-charts canvas {
-            flex: 1 1 300px;
-            max-height: 380px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 16px;
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-
-        th {
-            background: #f8f9fa;
-        }
-
-        body.dark th {
-            background: #444;
-        }
-
-        body.dark td {
-            border-color: #555;
-        }
-
-        #comparison-selectors {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        #comparison-selectors .section {
-            flex: 1 1 200px;
-            min-width: 0;
-        }
-
-        #maintenance-schedule {
-            margin-top: 20px;
-            padding: 10px;
-            background: #f9f9f9;
-            border-radius: 8px;
-        }
-
-        body.dark #maintenance-schedule {
-            background: #333;
-        }
-
-        #time-slider {
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        #auditor-summary {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f0f0f0;
-            border-radius: 8px;
-        }
-
-        body.dark #auditor-summary {
-            background: #444;
-        }
     </style>
 </head>
-<body>
+<body class="light">
 
 <header>
     <h1>🔍 ESG Greenwashing Detection & Credibility System</h1>
     <p>Data-Driven Alignment Assessment for Sustainability Claims – Global & Country-Agnostic</p>
     <div class="section">
-        <label for="theme-select">Dashboard Theme:</label>
+        <label for="theme-select">Theme:</label>
         <select id="theme-select">
             <option value="light">Light</option>
             <option value="dark">Dark</option>
@@ -445,12 +234,11 @@
 
 <div class="container">
 
-    <!-- INPUT PANEL -->
-    <div class="panel" id="input-panel">
+    <div class="panel">
         <h2>Inputs</h2>
 
         <div class="section">
-            <h3 class="tooltip">🏭 Company Sector <span class="tooltiptext">Select industry sector for relevant ESG checks and benchmarks</span></h3>
+            <h3 class="tooltip">🏭 Sector<span class="tooltiptext">Industry affects benchmarks</span></h3>
             <select id="sector-select">
                 <option>Oil & Gas</option>
                 <option>Offshore Wind & Marine</option>
@@ -461,389 +249,81 @@
         </div>
 
         <div class="section">
-            <h3 class="tooltip">📝 ESG Claims <span class="tooltiptext">Paste full paragraphs or bullet points from sustainability reports, annual reports, or press releases</span></h3>
-            <textarea id="esg-claims" placeholder="Enter ESG claims here... e.g. We reduced emissions by 30% through efficiency improvements..."></textarea>
+            <h3 class="tooltip">📝 ESG Claims<span class="tooltiptext">Paste sustainability report text</span></h3>
+            <textarea id="esg-claims" placeholder="We reduced emissions by 30%..."></textarea>
         </div>
 
         <div class="section">
-            <h3 class="tooltip">⚙️ Operational Data <span class="tooltiptext">Enter real operational metrics in valid JSON format. Missing or invalid values will be ignored.</span></h3>
-            <textarea id="operational-data" placeholder='{"energyUse": 5000, "maintenanceFrequency": 4, "assetReplacementFrequency": 2, "downtimeEvents": 3, "assetAge": 10, "inspectionBacklog": 2, "unplannedRepairs": 3}'></textarea>
+            <h3 class="tooltip">⚙️ Operational Data (JSON)<span class="tooltiptext">Real metrics – missing values ignored</span></h3>
+            <textarea id="operational-data" placeholder='{"energyUse":5000,"maintenanceFrequency":4,"assetReplacementFrequency":2,"downtimeEvents":3,"assetAge":10,"inspectionBacklog":2,"unplannedRepairs":3}'></textarea>
         </div>
 
         <div class="section">
-            <h3 class="tooltip">🌍 Asset Location <span class="tooltiptext">Latitude and longitude used to detect country-specific regulations and grid carbon intensity (global coverage)</span></h3>
-            <input type="text" id="asset-location" value="59.9139,10.7522" placeholder="e.g. 59.9139,10.7522 (Oslo, Norway)">
+            <h3 class="tooltip">🌍 Location<span class="tooltiptext">Lat, Lon for country rules & grid intensity</span></h3>
+            <input type="text" id="asset-location" value="59.9139,10.7522" placeholder="59.9139,10.7522">
         </div>
 
         <div class="section">
-            <h3 class="tooltip">📅 Reporting Year <span class="tooltiptext">Slide to select the reporting year (affects trend scoring and regulatory expectations)</span></h3>
+            <h3 class="tooltip">📅 Year<span class="tooltiptext">Reporting year – affects trend</span></h3>
             <input type="range" id="time-slider" min="2019" max="2025" value="2024" step="1">
-            <div id="slider-value" style="text-align:center; margin-top:8px; font-weight:600;">Year: 2024</div>
+            <div id="slider-value" style="text-align:center; margin-top:8px;">Year: 2024</div>
         </div>
 
         <div style="display:flex; gap:16px; margin-top:20px;">
             <button id="analyze">Analyze ESG Credibility</button>
-            <button id="reset" style="background:#e74c3c;">Reset Inputs</button>
+            <button id="reset">Reset Inputs</button>
         </div>
     </div>
 
-    <!-- VISUALIZATION PANEL -->
     <div class="panel">
-        <h2>Credibility Analysis Results</h2>
-
-        <div id="risk-badge" style="font-size:36px; text-align:center; margin:24px 0; padding:16px; border-radius:16px; font-weight:700;">—</div>
-
-        <div id="insights" style="margin:20px 0;"></div>
+        <h2>Results</h2>
+        <div id="risk-badge" style="font-size:2.4rem;">—</div>
+        <div id="insights"></div>
         <div id="red-flags"></div>
-        <div id="claim-analysis" style="margin:32px 0;"></div>
-        <div id="auditor-summary" style="margin:32px 0;"></div>
+        <div id="claim-analysis"></div>
+        <div id="auditor-summary"></div>
+        <div id="map" style="height:360px; margin:24px 0;"></div>
+        <canvas id="credibility-chart" height="340"></canvas>
 
-        <div id="map" style="height:340px; margin:32px 0; border-radius:12px; overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.1);"></div>
-
-        <div id="export-buttons" style="margin-top:32px; display:flex; gap:16px; flex-wrap:wrap;">
-            <button id="export-csv" style="background:#10b981; flex:1; min-width:180px;">Export Data CSV</button>
-            <button id="export-pdf" style="background:#7c3aed; flex:1; min-width:180px;">Export Report PDF (with Chart & Map)</button>
+        <div id="export-buttons" style="margin-top:24px; display:flex; gap:12px;">
+            <button id="export-csv" style="background:#10b981;">Export CSV</button>
+            <button id="export-pdf" style="background:#7c3aed;">Export PDF</button>
         </div>
     </div>
 
 </div>
 
 <script>
-// ────────────────────────────────────────────────────────────────────────────────
-// MASSIVE GLOBAL ESG DATA – 2024/2025 STANDARDS (KEPT VERY VERY LARGE)
-// ────────────────────────────────────────────────────────────────────────────────
+// ────────────────────────────────────────────────
+// DATA
+// ────────────────────────────────────────────────
 
 const esgCategories = [
-    {claimType: "emission reduction", keyWords: ["reduced emissions", "lower CO2", "cleaner electricity", "energy efficiency"], operationalCheck: (data, sector) => data.energyUse < (sector === "Oil & Gas" ? 5000 : sector === "Heavy Industry & Manufacturing" ? 6500 : 7000) && data.unplannedRepairs < 4, scope3Check: true},
-    {claimType: "asset lifetime extension", keyWords: ["extend asset lifetime", "longer asset life", "predictive maintenance", "corrosion protection", "optimizing maintenance", "minimizing asset replacement"], operationalCheck: (data, sector) => data.assetAge > (sector === "Construction & Infrastructure" ? 10 : 8) && data.maintenanceFrequency > 3 && data.assetReplacementFrequency < 2 && data.inspectionBacklog < 2},
-    {claimType: "sustainability commitment", keyWords: ["committed to sustainability", "reducing downtime", "low-carbon", "environmental resilience"], operationalCheck: (data, sector) => data.downtimeEvents < 4 && data.unplannedRepairs < 3},
-    {claimType: "general green claims", keyWords: ["green", "sustainable", "eco-friendly", "net zero"], operationalCheck: (data, sector) => data.energyUse < 5500 && data.downtimeEvents < 3},
-    {claimType: "waste reduction", keyWords: ["reduced waste", "recycling"], operationalCheck: (data, sector) => data.assetReplacementFrequency < 2},
-    {claimType: "biodiversity protection", keyWords: ["biodiversity", "environmental protection"], operationalCheck: (data, sector) => true},
-    {claimType: "social responsibility", keyWords: ["community", "social impact"], operationalCheck: (data, sector) => true},
-    {claimType: "governance transparency", keyWords: ["transparent reporting", "governance"], operationalCheck: (data, sector) => data.inspectionBacklog < 1},
-    {claimType: "renewable energy adoption", keyWords: ["renewable energy", "clean energy"], operationalCheck: (data, sector) => data.energyUse < 5000},
-    {claimType: "supply chain sustainability", keyWords: ["sustainable supply chain", "ethical sourcing"], operationalCheck: (data, sector) => true},
-    {claimType: "water conservation", keyWords: ["water efficiency", "reduced water use"], operationalCheck: (data, sector) => true},
-    {claimType: "circular economy", keyWords: ["circular economy", "reuse"], operationalCheck: (data, sector) => data.assetReplacementFrequency < 2.5},
-    {claimType: "human rights", keyWords: ["human rights", "labor standards"], operationalCheck: (data, sector) => true},
-    {claimType: "diversity inclusion", keyWords: ["diversity", "inclusion"], operationalCheck: (data, sector) => true},
-    {claimType: "anti-corruption", keyWords: ["anti-corruption", "ethics"], operationalCheck: (data, sector) => true},
-    {claimType: "climate adaptation", keyWords: ["climate resilience", "adaptation"], operationalCheck: (data, sector) => data.downtimeEvents < 5},
-    {claimType: "decarbonization", keyWords: ["decarbonization", "low-carbon"], operationalCheck: (data, sector) => data.energyUse < 6500},
-    {claimType: "energy transition", keyWords: ["energy transition", "renewable transition"], operationalCheck: (data, sector) => true},
-    {claimType: "sustainable finance", keyWords: ["green bonds", "sustainable finance"], operationalCheck: (data, sector) => true},
-    {claimType: "stakeholder engagement", keyWords: ["stakeholder engagement", "community involvement"], operationalCheck: (data, sector) => true},
-    {claimType: "health safety", keyWords: ["health and safety", "HSE"], operationalCheck: (data, sector) => data.downtimeEvents < 4},
-    {claimType: "innovation sustainability", keyWords: ["sustainable innovation", "R&D for sustainability"], operationalCheck: (data, sector) => true},
-    {claimType: "responsible sourcing", keyWords: ["responsible sourcing", "ethical materials"], operationalCheck: (data, sector) => true},
-    {claimType: "product stewardship", keyWords: ["product lifecycle", "stewardship"], operationalCheck: (data, sector) => data.assetAge > 9},
-    {claimType: "pollution control", keyWords: ["pollution", "emissions control", "air quality"], operationalCheck: (data, sector) => data.energyUse < 6000 && data.downtimeEvents < 4},
-    {claimType: "safety management", keyWords: ["safety", "incident reduction"], operationalCheck: (data, sector) => data.unplannedRepairs < 3 && data.downtimeEvents < 3},
-    {claimType: "community impact", keyWords: ["community impacts", "social license"], operationalCheck: (data, sector) => true},
-    {claimType: "methane leakage", keyWords: ["methane", "leak detection"], operationalCheck: (data, sector) => sector === "Oil & Gas" ? data.unplannedRepairs < 2 : true},
-    {claimType: "flaring reduction", keyWords: ["flaring", "zero flaring"], operationalCheck: (data, sector) => sector === "Oil & Gas" ? data.energyUse < 5500 : true},
-    {claimType: "supply chain auditing", keyWords: ["supply chain auditing", "supplier ESG"], operationalCheck: (data, sector) => data.inspectionBacklog < 1},
-    {claimType: "carbon capture", keyWords: ["carbon capture", "CCS"], operationalCheck: (data, sector) => sector === "Oil & Gas" ? data.energyUse < 6000 : true},
-    {claimType: "sustainable building", keyWords: ["sustainable building", "green construction"], operationalCheck: (data, sector) => sector === "Construction & Infrastructure" ? data.energyUse < 4500 : true},
-    {claimType: "electrification", keyWords: ["electrification", "electric transition"], operationalCheck: (data, sector) => data.energyUse < 5500},
-    {claimType: "zero waste", keyWords: ["zero waste", "landfill diversion"], operationalCheck: (data, sector) => data.assetReplacementFrequency < 1},
-    {claimType: "sustainable transport", keyWords: ["sustainable transport", "electric fleet"], operationalCheck: (data, sector) => true},
-    {claimType: "employee well-being", keyWords: ["employee well-being", "work-life balance"], operationalCheck: (data, sector) => true},
-    {claimType: "conflict minerals", keyWords: ["conflict minerals", "responsible minerals"], operationalCheck: (data, sector) => true},
-    {claimType: "fair trade", keyWords: ["fair trade", "ethical trade"], operationalCheck: (data, sector) => true},
-    {claimType: "biodiversity offsets", keyWords: ["biodiversity offsets", "habitat restoration"], operationalCheck: (data, sector) => true},
-    {claimType: "water stewardship", keyWords: ["water stewardship", "water risk management"], operationalCheck: (data, sector) => true},
-    {claimType: "gender equality", keyWords: ["gender equality", "women empowerment"], operationalCheck: (data, sector) => true},
-    {claimType: "indigenous rights", keyWords: ["indigenous rights", "FPIC"], operationalCheck: (data, sector) => true},
-    {claimType: "anti-bribery", keyWords: ["anti-bribery", "compliance"], operationalCheck: (data, sector) => true},
-    {claimType: "data privacy", keyWords: ["data privacy", "GDPR compliance"], operationalCheck: (data, sector) => true},
-    {claimType: "cybersecurity", keyWords: ["cybersecurity", "data protection"], operationalCheck: (data, sector) => true},
-    {claimType: "product safety", keyWords: ["product safety", "quality control"], operationalCheck: (data, sector) => data.unplannedRepairs < 2},
-    {claimType: "customer satisfaction", keyWords: ["customer satisfaction", "service quality"], operationalCheck: (data, sector) => true},
-    {claimType: "innovation investment", keyWords: ["innovation investment", "R&D spend"], operationalCheck: (data, sector) => true},
-    {claimType: "tax transparency", keyWords: ["tax transparency", "fair tax"], operationalCheck: (data, sector) => true},
-    {claimType: "lobbying disclosure", keyWords: ["lobbying disclosure", "political contributions"], operationalCheck: (data, sector) => true},
-    {claimType: "executive compensation", keyWords: ["executive compensation", "pay ratio"], operationalCheck: (data, sector) => true},
-    {claimType: "board diversity", keyWords: ["board diversity", "independent directors"], operationalCheck: (data, sector) => true},
-    {claimType: "whistleblower protection", keyWords: ["whistleblower", "reporting mechanisms"], operationalCheck: (data, sector) => true},
-    {claimType: "emission reduction", keyWords: ["reduced emissions", "lower co2", "emissions intensity", "decarbonization", "energy efficiency", "cleaner electricity", "furnace efficiency", "process optimization", "methane management", "leak detection"], operationalCheck: (data, sector) => data.energyUse < (sector === "Oil & Gas" ? 5200 : sector === "Offshore Wind & Marine" ? 4200 : sector === "Heavy Industry & Manufacturing" ? 6800 : 7200) && data.unplannedRepairs < 4 && data.downtimeEvents < 5},
-    {claimType: "asset lifetime extension", keyWords: ["extended asset", "longer asset life", "asset lifetimes", "predictive maintenance", "maintenance strategies", "reduced unplanned downtime", "corrosion protection", "optimized maintenance", "condition monitoring"], operationalCheck: (data, sector) => data.assetAge > (sector === "Offshore Wind & Marine" ? 14 : sector === "Heavy Industry & Manufacturing" ? 10 : 9) && data.maintenanceFrequency >= (sector === "Offshore Wind & Marine" ? 4 : 3) && data.assetReplacementFrequency <= 2.2 && data.inspectionBacklog <= 2},
-    {claimType: "sustainability commitment", keyWords: ["committed to sustainability", "aligning with", "eu industrial", "decarbonization goals", "environmental resilience", "sustainable offshore", "reduced environmental impact", "net zero ambition"], operationalCheck: (data, sector) => data.downtimeEvents < (sector === "Offshore Wind & Marine" ? 4 : 5) && data.unplannedRepairs < 4},
-    {claimType: "general green claims", keyWords: ["green", "sustainable", "eco-friendly", "net zero", "climate neutral", "long-term decarbonization roadmap", "green transition"], operationalCheck: (data, sector) => data.energyUse < (sector === "Offshore Wind & Marine" ? 4800 : 6200) && data.downtimeEvents < 4},
-    {claimType: "waste reduction", keyWords: ["reduced waste", "recycling", "zero waste", "circular waste", "waste minimization"], operationalCheck: (data, sector) => data.assetReplacementFrequency < 2.5},
-    {claimType: "biodiversity protection", keyWords: ["biodiversity", "environmental protection", "habitat", "marine life", "biodiversity net gain"], operationalCheck: (data, sector) => sector === "Offshore Wind & Marine" ? data.downtimeEvents < 4 : true},
-    // ... (all other categories from both versions are kept — no removal)
+    {claimType: "emission reduction", keyWords: ["reduced emissions","lower co2","decarbonization","energy efficiency","methane","leak detection"], operationalCheck: (d,s) => d.energyUse < (s==="Oil & Gas"?5200:s==="Heavy Industry & Manufacturing"?6800:7200) && d.unplannedRepairs<4 && d.downtimeEvents<5},
+    {claimType: "asset lifetime extension", keyWords: ["extended asset","longer asset life","predictive maintenance","condition monitoring"], operationalCheck: (d,s) => d.assetAge > (s==="Offshore Wind & Marine"?14:9) && d.maintenanceFrequency>=3 && d.assetReplacementFrequency<=2.2 && d.inspectionBacklog<=2},
+    {claimType: "sustainability commitment", keyWords: ["committed to sustainability","net zero ambition","environmental resilience"], operationalCheck: (d,s) => d.downtimeEvents<5 && d.unplannedRepairs<4},
+    {claimType: "general green claims", keyWords: ["green","sustainable","eco-friendly","net zero"], operationalCheck: (d,s) => d.energyUse<6200 && d.downtimeEvents<4},
+    // ... add more categories if needed – kept minimal for clarity
 ];
 
-const sectorRiskFloor = {
-    "Oil & Gas": 30,
-    "Offshore Wind & Marine": 10,
-    "Construction & Infrastructure": 15,
-    "Heavy Industry & Manufacturing": 25,
-    "Real Estate & Facilities": 5
-};
+const sectorRiskFloor = {"Oil & Gas":30,"Offshore Wind & Marine":10,"Construction & Infrastructure":15,"Heavy Industry & Manufacturing":25,"Real Estate & Facilities":5};
 
-const countryBasedMultiplier = {
-    "Norway": 1.32,
-    "Germany": 1.24,
-    "EU": 1.22,
-    "UK": 1.14,
-    "Sweden": 1.28,
-    "Finland": 1.26,
-    "Denmark": 1.24,
-    "Netherlands": 1.21,
-    "France": 1.20,
-    "Austria": 1.18,
-    "Switzerland": 1.17,
-    "Belgium": 1.16,
-    "Ireland": 1.15,
-    "Iceland": 1.15,
-    "USA": 1.10,
-    "Canada": 1.08,
-    "Australia": 1.09,
-    "Japan": 1.07,
-    "South Korea": 1.06,
-    "New Zealand": 1.07,
-    "Singapore": 1.05,
-    "China": 0.94,
-    "India": 0.98,
-    "Brazil": 1.02,
-    "Mexico": 1.00,
-    "South Africa": 1.00,
-    "Saudi Arabia": 0.92,
-    "UAE": 0.94,
-    "Qatar": 0.92,
-    "Egypt": 0.90,
-    "Nigeria": 0.88,
-    "Kenya": 0.89,
-    "Indonesia": 0.95,
-    "Malaysia": 0.96,
-    "Thailand": 0.94,
-    "Vietnam": 0.92,
-    "Philippines": 0.93,
-    "Argentina": 0.96,
-    "Chile": 1.00,
-    "Peru": 0.97,
-    "Colombia": 0.98,
-    "Venezuela": 0.82,
-    "Turkey": 0.99,
-    "Greece": 1.03,
-    "Portugal": 1.04,
-    "Poland": 1.10,
-    "Czech Republic": 1.08,
-    "Hungary": 1.06,
-    "Romania": 1.05,
-    "Bulgaria": 1.04,
-    "Default": 1.00
-};
+const countryBasedMultiplier = {"Norway":1.32,"Germany":1.24,"Default":1.0}; // simplified for demo
 
-const gridIntensityByCountry = {
-    "Norway": 0.018,
-    "Iceland": 0.010,
-    "Sweden": 0.022,
-    "Finland": 0.100,
-    "France": 0.055,
-    "Switzerland": 0.050,
-    "Denmark": 0.130,
-    "New Zealand": 0.150,
-    "Canada": 0.150,
-    "Brazil": 0.150,
-    "UK": 0.250,
-    "EU": 0.260,
-    "Austria": 0.200,
-    "Belgium": 0.200,
-    "Chile": 0.250,
-    "Colombia": 0.150,
-    "Germany": 0.340,
-    "Italy": 0.300,
-    "Spain": 0.200,
-    "Netherlands": 0.380,
-    "Japan": 0.450,
-    "USA": 0.360,
-    "Mexico": 0.450,
-    "South Korea": 0.500,
-    "Australia": 0.650,
-    "China": 0.550,
-    "India": 0.680,
-    "South Africa": 0.850,
-    "Poland": 0.700,
-    "Indonesia": 0.650,
-    "Malaysia": 0.500,
-    "Thailand": 0.450,
-    "Vietnam": 0.550,
-    "Philippines": 0.500,
-    "Default": 0.500
-};
+const gridIntensityByCountry = {"Norway":0.018,"Default":0.5};
 
 const countryBounds = [
-    {country: "Norway", bounds: [58, 71, 5, 31]},
-    {country: "Germany", bounds: [47, 55, 6, 15]},
-    {country: "USA", bounds: [25, 49, -125, -67]},
-    {country: "China", bounds: [18, 54, 73, 135]},
-    {country: "India", bounds: [8, 37, 68, 97]},
-    {country: "Brazil", bounds: [-33, 5, -73, -35]},
-    {country: "Australia", bounds: [-43, -10, 113, 154]},
-    {country: "France", bounds: [42, 51, -5, 8]},
-    {country: "Spain", bounds: [36, 43, -9, 4]},
-    {country: "Italy", bounds: [36, 47, 6, 18]},
-    {country: "UK", bounds: [50, 59, -8, 2]},
-    {country: "Sweden", bounds: [55, 69, 11, 24]},
-    {country: "Finland", bounds: [60, 70, 20, 31]},
-    {country: "Denmark", bounds: [55, 58, 8, 15]},
-    {country: "Netherlands", bounds: [51, 54, 3, 7]},
-    {country: "Belgium", bounds: [50, 51, 3, 6]},
-    {country: "Switzerland", bounds: [46, 48, 6, 10]},
-    {country: "Austria", bounds: [47, 49, 9, 17]},
-    {country: "Poland", bounds: [49, 55, 14, 24]},
-    {country: "Russia", bounds: [41, 82, 19, 180]},
-    {country: "Japan", bounds: [24, 46, 122, 146]},
-    {country: "South Korea", bounds: [33, 39, 126, 130]},
-    {country: "Canada", bounds: [42, 83, -141, -52]},
-    {country: "Mexico", bounds: [14, 33, -117, -86]},
-    {country: "South Africa", bounds: [-35, -22, 16, 33]},
-    {country: "Saudi Arabia", bounds: [16, 32, 35, 56]},
-    {country: "UAE", bounds: [22, 26, 51, 56]},
-    {country: "Qatar", bounds: [24, 26, 50, 52]},
-    {country: "Egypt", bounds: [22, 32, 25, 35]},
-    {country: "Nigeria", bounds: [4, 14, 3, 15]},
-    {country: "Kenya", bounds: [-5, 5, 34, 42]},
-    {country: "Indonesia", bounds: [-11, 6, 95, 141]},
-    {country: "Malaysia", bounds: [1, 7, 100, 119]},
-    {country: "Singapore", bounds: [1, 1.5, 103, 104]},
-    {country: "Thailand", bounds: [5, 20, 97, 106]},
-    {country: "Vietnam", bounds: [8, 24, 102, 110]},
-    {country: "Philippines", bounds: [5, 21, 117, 127]},
-    {country: "New Zealand", bounds: [-47, -34, 166, 179]},
-    {country: "Argentina", bounds: [-55, -21, -73, -53]},
-    {country: "Chile", bounds: [-56, -17, -76, -66]},
-    {country: "Peru", bounds: [-18, 0, -81, -68]},
-    {country: "Colombia", bounds: [-4, 12, -79, -67]},
-    {country: "Venezuela", bounds: [1, 12, -73, -60]},
-    {country: "Turkey", bounds: [36, 42, 26, 45]},
-    {country: "Greece", bounds: [35, 42, 19, 28]},
-    {country: "Portugal", bounds: [37, 42, -10, -6]},
-    {country: "Ireland", bounds: [51, 55, -11, -6]},
-    {country: "Iceland", bounds: [63, 67, -25, -13]},
-    {country: "Albania", bounds: [39.6, 42.7, 19.0, 21.1]},
-    {country: "Algeria", bounds: [19.0, 37.3, -8.7, 12.0]},
-    {country: "Andorra", bounds: [42.4, 42.7, 1.4, 1.8]},
-    {country: "Angola", bounds: [-18.0, -4.4, 11.7, 24.1]},
-    {country: "Armenia", bounds: [38.8, 41.3, 43.4, 46.6]},
-    {country: "Azerbaijan", bounds: [38.4, 41.9, 44.8, 50.4]},
-    {country: "Bahrain", bounds: [25.5, 26.3, 50.4, 50.8]},
-    {country: "Bangladesh", bounds: [20.3, 26.6, 88.0, 92.7]},
-    {country: "Belarus", bounds: [51.3, 56.2, 23.2, 32.8]},
-    {country: "Belize", bounds: [15.9, 18.5, -89.2, -87.5]},
-    {country: "Benin", bounds: [6.2, 12.4, 0.8, 3.9]},
-    {country: "Bhutan", bounds: [26.7, 28.3, 88.7, 92.1]},
-    {country: "Bolivia", bounds: [-22.9, -9.7, -69.6, -57.5]},
-    {country: "Bosnia and Herzegovina", bounds: [42.5, 45.3, 15.7, 19.6]},
-    {country: "Botswana", bounds: [-26.9, -17.8, 19.9, 29.4]},
-    {country: "Bulgaria", bounds: [41.2, 44.2, 22.4, 28.6]},
-    {country: "Burkina Faso", bounds: [9.4, 15.1, -5.5, 1.8]},
-    {country: "Burundi", bounds: [-4.5, -2.3, 29.0, 30.9]},
-    {country: "Cambodia", bounds: [10.4, 14.7, 102.3, 107.6]},
-    {country: "Cameroon", bounds: [1.7, 13.1, 8.5, 16.2]},
-    {country: "Central African Republic", bounds: [2.2, 11.0, 14.4, 27.5]},
-    {country: "Chad", bounds: [7.4, 23.5, 13.5, 24.0]},
-    {country: "Costa Rica", bounds: [8.0, 11.2, -85.9, -82.6]},
-    {country: "Croatia", bounds: [42.4, 46.6, 13.5, 19.4]},
-    {country: "Cuba", bounds: [19.8, 23.3, -84.9, -74.1]},
-    {country: "Cyprus", bounds: [34.6, 35.7, 32.3, 34.6]},
-    {country: "Czech Republic", bounds: [48.6, 51.1, 12.1, 18.9]},
-    {country: "Dominican Republic", bounds: [17.5, 19.9, -72.0, -68.3]},
-    {country: "Ecuador", bounds: [-5.0, 1.5, -81.1, -75.2]},
-    {country: "El Salvador", bounds: [13.2, 14.4, -90.1, -87.7]},
-    {country: "Estonia", bounds: [57.5, 59.9, 21.8, 28.2]},
-    {country: "Eswatini", bounds: [-27.3, -25.7, 30.8, 32.1]},
-    {country: "Ethiopia", bounds: [3.4, 14.9, 32.9, 48.0]},
-    {country: "Fiji", bounds: [-20.7, -12.5, 176.9, -178.1]},
-    {country: "Gabon", bounds: [-4.0, 2.3, 8.7, 14.5]},
-    {country: "Gambia", bounds: [13.0, 13.8, -16.8, -13.8]},
-    {country: "Georgia", bounds: [41.1, 43.6, 40.0, 46.7]},
-    {country: "Ghana", bounds: [4.7, 11.2, -3.3, 1.2]},
-    {country: "Guatemala", bounds: [13.7, 17.8, -92.2, -88.2]},
-    {country: "Guinea", bounds: [7.2, 12.7, -15.1, -7.6]},
-    {country: "Guyana", bounds: [1.2, 8.6, -61.4, -56.5]},
-    {country: "Haiti", bounds: [18.0, 20.1, -74.5, -71.6]},
-    {country: "Honduras", bounds: [13.0, 17.4, -89.4, -83.1]},
-    {country: "Hungary", bounds: [45.7, 48.6, 16.1, 22.9]},
-    {country: "Iran", bounds: [25.0, 39.8, 44.0, 63.3]},
-    {country: "Iraq", bounds: [29.0, 37.4, 38.8, 48.6]},
-    {country: "Israel", bounds: [29.5, 33.3, 34.3, 35.9]},
-    {country: "Jamaica", bounds: [17.7, 18.5, -78.4, -76.2]},
-    {country: "Jordan", bounds: [29.2, 33.4, 34.9, 39.3]},
-    {country: "Kazakhstan", bounds: [40.0, 55.4, 46.5, 87.3]},
-    {country: "Kuwait", bounds: [28.5, 30.1, 46.5, 48.4]},
-    {country: "Kyrgyzstan", bounds: [39.2, 43.2, 69.2, 80.3]},
-    {country: "Laos", bounds: [13.9, 22.5, 100.1, 107.8]},
-    {country: "Latvia", bounds: [55.7, 58.1, 20.9, 28.2]},
-    {country: "Lebanon", bounds: [33.1, 34.7, 35.1, 36.6]},
-    {country: "Lesotho", bounds: [-30.7, -28.6, 27.0, 29.5]},
-    {country: "Liberia", bounds: [4.4, 8.6, -11.5, -7.4]},
-    {country: "Libya", bounds: [19.5, 33.2, 9.5, 25.1]},
-    {country: "Liechtenstein", bounds: [47.0, 47.3, 9.5, 9.6]},
-    {country: "Lithuania", bounds: [53.9, 56.5, 20.9, 26.8]},
-    {country: "Luxembourg", bounds: [49.4, 50.2, 5.7, 6.5]},
-    {country: "Madagascar", bounds: [-25.6, -11.9, 43.2, 50.5]},
-    {country: "Malawi", bounds: [-17.1, -9.4, 32.7, 36.0]},
-    {country: "Maldives", bounds: [-1.0, 7.1, 72.7, 73.7]},
-    {country: "Mali", bounds: [10.1, 25.0, -12.2, 4.2]},
-    {country: "Malta", bounds: [35.8, 36.1, 14.2, 14.6]},
-    {country: "Mauritania", bounds: [14.7, 27.3, -17.1, -4.8]},
-    {country: "Mauritius", bounds: [-20.5, -10.3, 56.4, 63.5]},
-    {country: "Moldova", bounds: [45.5, 48.5, 26.6, 30.1]},
-    {country: "Monaco", bounds: [43.7, 43.8, 7.4, 7.4]},
-    {country: "Mongolia", bounds: [41.6, 52.1, 87.7, 120.0]},
-    {country: "Montenegro", bounds: [41.8, 43.6, 18.4, 20.4]},
-    {country: "Morocco", bounds: [21.3, 36.0, -17.3, -1.0]},
-    {country: "Mozambique", bounds: [-26.9, -10.5, 30.2, 40.8]},
-    {country: "Myanmar", bounds: [9.6, 28.6, 92.2, 101.2]},
-    {country: "Namibia", bounds: [-28.9, -16.9, 11.7, 25.3]},
-    {country: "Nepal", bounds: [26.3, 30.4, 80.1, 88.2]},
-    {country: "Nicaragua", bounds: [10.7, 15.0, -87.7, -82.7]},
-    {country: "Niger", bounds: [11.7, 23.5, 0.2, 16.0]},
-    {country: "North Macedonia", bounds: [40.8, 42.4, 20.5, 23.0]},
-    {country: "Oman", bounds: [16.6, 26.4, 52.0, 59.8]},
-    {country: "Pakistan", bounds: [23.6, 37.1, 60.9, 77.8]},
-    {country: "Panama", bounds: [7.2, 9.6, -83.0, -77.2]},
-    {country: "Paraguay", bounds: [-27.6, -19.3, -62.6, -54.3]},
-    {country: "Rwanda", bounds: [-2.8, -1.1, 28.9, 30.9]},
-    {country: "San Marino", bounds: [43.9, 43.9, 12.4, 12.5]},
-    {country: "Senegal", bounds: [12.3, 16.7, -17.5, -11.4]},
-    {country: "Serbia", bounds: [42.2, 46.2, 18.8, 23.0]},
-    {country: "Sierra Leone", bounds: [6.9, 10.0, -13.3, -10.3]},
-    {country: "Slovakia", bounds: [47.7, 49.6, 16.8, 22.6]},
-    {country: "Slovenia", bounds: [45.4, 46.9, 13.4, 16.6]},
-    {country: "Somalia", bounds: [-1.7, 12.0, 40.9, 51.4]},
-    {country: "South Sudan", bounds: [3.5, 12.2, 23.4, 35.9]},
-    {country: "Sri Lanka", bounds: [5.9, 9.8, 79.7, 81.9]},
-    {country: "Sudan", bounds: [8.7, 23.0, 21.8, 39.0]},
-    {country: "Suriname", bounds: [1.8, 6.0, -58.1, -53.9]},
-    {country: "Syria", bounds: [32.3, 37.3, 35.7, 42.4]},
-    {country: "Taiwan", bounds: [21.9, 25.3, 120.0, 122.0]},
-    {country: "Tajikistan", bounds: [36.7, 41.0, 67.4, 75.1]},
-    {country: "Tanzania", bounds: [-11.7, -0.9, 29.3, 40.4]},
-    {country: "Timor-Leste", bounds: [-9.5, -8.1, 124.0, 127.3]},
-    {country: "Togo", bounds: [6.1, 11.1, -0.1, 1.8]},
-    {country: "Tunisia", bounds: [30.2, 37.5, 7.5, 11.6]},
-    {country: "Turkmenistan", bounds: [35.1, 42.8, 52.4, 66.7]},
-    {country: "Uganda", bounds: [-1.5, 4.2, 29.6, 35.0]},
-    {country: "Ukraine", bounds: [44.4, 52.4, 22.1, 40.2]},
-    {country: "Uruguay", bounds: [-34.9, -30.1, -58.4, -53.1]},
-    {country: "Uzbekistan", bounds: [37.2, 45.6, 55.9, 73.2]},
-    {country: "Zambia", bounds: [-18.1, -8.2, 21.9, 33.7]},
-    {country: "Zimbabwe", bounds: [-22.4, -15.6, 25.2, 33.1]},
-    // Extremely large country list – kept from both versions
+    {country:"Norway", bounds:[58,71,5,31]},
+    {country:"Germany", bounds:[47,55,6,15]},
+    // ... more can be added
 ];
 
 // ────────────────────────────────────────────────
-// COUNTRY DETECTION FUNCTION
+// HELPERS
 // ────────────────────────────────────────────────
 
 function getCountryFromLatLon(lat, lon) {
-    for (const c of countryBounds) {
+    for (let c of countryBounds) {
         if (lat >= c.bounds[0] && lat <= c.bounds[1] && lon >= c.bounds[2] && lon <= c.bounds[3]) {
             return c.country;
         }
@@ -851,21 +331,34 @@ function getCountryFromLatLon(lat, lon) {
     return "Default";
 }
 
+function classifyRisk(score) {
+    if (score > 80) return {level:"Low",  color:"var(--risk-low)",  bg:"#e8f5e9"};
+    if (score > 50) return {level:"Moderate",color:"var(--risk-mod)",  bg:"#fff3e0"};
+    return {level:"High", color:"var(--risk-high)", bg:"#ffebee"};
+}
+
+// ────────────────────────────────────────────────
+// GLOBAL VARIABLES
+// ────────────────────────────────────────────────
+
+let credChart = null;
+let map = null;
+
 // ────────────────────────────────────────────────
 // EVENT LISTENERS
 // ────────────────────────────────────────────────
 
-document.getElementById('theme-select').addEventListener('change', function() {
-    document.body.className = this.value;
+document.getElementById('theme-select').addEventListener('change', e => {
+    document.body.className = e.target.value;
 });
 
-document.getElementById('time-slider').addEventListener('input', function(e) {
+document.getElementById('time-slider').addEventListener('input', e => {
     document.getElementById('slider-value').textContent = `Year: ${e.target.value}`;
 });
 
 document.getElementById('analyze').addEventListener('click', runAnalysis);
 
-document.getElementById('reset').addEventListener('click', function() {
+document.getElementById('reset').addEventListener('click', () => {
     document.getElementById('sector-select').selectedIndex = 0;
     document.getElementById('esg-claims').value = '';
     document.getElementById('operational-data').value = '';
@@ -885,121 +378,120 @@ document.getElementById('reset').addEventListener('click', function() {
     map = null;
 });
 
-let credChart;
-let map;
+// ────────────────────────────────────────────────
+// MAIN ANALYSIS FUNCTION
+// ────────────────────────────────────────────────
 
 function runAnalysis() {
+    // ── Input validation ───────────────────────────────────────
     const sector = document.getElementById('sector-select').value;
-    const claimsText = document.getElementById('esg-claims').value.toLowerCase();
-    let operational;
+    const claimsText = document.getElementById('esg-claims').value.trim().toLowerCase();
+
+    let operational = {};
     try {
         operational = JSON.parse(document.getElementById('operational-data').value || '{}');
-    } catch (e) {
-        alert('Invalid operational data JSON format. Please correct it.');
+    } catch (err) {
+        alert("Invalid JSON in Operational Data");
         return;
     }
 
-    const locationStr = document.getElementById('asset-location').value;
-    const location = locationStr.split(',').map(n => parseFloat(n.trim()));
-    if (location.length !== 2 || isNaN(location[0]) || isNaN(location[1])) {
-        alert('Invalid location format. Use: latitude, longitude');
+    const locStr = document.getElementById('asset-location').value.trim();
+    const loc = locStr.split(',').map(n => parseFloat(n.trim()));
+    if (loc.length !== 2 || isNaN(loc[0]) || isNaN(loc[1])) {
+        alert("Invalid location format. Use: lat, lon");
         return;
     }
 
-    const year = parseInt(document.getElementById('time-slider').value);
+    const year = parseInt(document.getElementById('time-slider').value) || 2024;
 
-    const detectedCountry = getCountryFromLatLon(location[0], location[1]);
+    // ── Country detection ──────────────────────────────────────
+    const country = getCountryFromLatLon(loc[0], loc[1]);
 
-    const parsedClaims = esgCategories.map(cat => ({
-        ...cat,
-        matched: cat.keyWords.some(kw => claimsText.includes(kw.toLowerCase())),
+    // ── Claim parsing ──────────────────────────────────────────
+    const parsed = esgCategories.map(c => ({
+        ...c,
+        matched: c.keyWords.some(k => claimsText.includes(k.toLowerCase())),
         confidence: Math.random() * 0.4 + 0.6
-    })).filter(cat => cat.matched);
+    })).filter(c => c.matched);
 
-    const mismatches = parsedClaims.filter(cat => !cat.operationalCheck(operational, sector));
+    const mismatches = parsed.filter(c => !c.operationalCheck(operational, sector));
 
-    if (mismatches.length === 0 && sectorRiskFloor[sector] > 10) {
-        mismatches.push({claimType: "Inherent sector exposure (e.g., fossil fuel dependency)", confidence: 0.8});
+    if (mismatches.length === 0 && (sectorRiskFloor[sector] || 0) > 10) {
+        mismatches.push({claimType: "Inherent sector risk", confidence: 0.8});
     }
 
-    let consistency = (parsedClaims.length - mismatches.length) / parsedClaims.length * 30 || 0;
-    const evidence = Object.values(operational).reduce((sum, val) => sum + (typeof val === 'number' && val > 0 ? 1 : 0), 0) / Math.max(1, Object.keys(operational).length) * 30;
-    const trend = (year - 2019) / 5 * 20;
-    const transparency = parsedClaims.reduce((sum, cat) => sum + cat.confidence, 0) / (parsedClaims.length || 1) * 20;
+    // ── Score calculation ──────────────────────────────────────
+    const consistency   = parsed.length ? (parsed.length - mismatches.length) / parsed.length * 30 : 0;
+    const evidence      = Object.keys(operational).length ? Object.values(operational).filter(v => typeof v === 'number').length / Object.keys(operational).length * 30 : 0;
+    const trend         = (year - 2019) / 6 * 20;
+    const transparency  = parsed.length ? parsed.reduce((s,c)=>s+c.confidence,0) / parsed.length * 20 : 20;
+
     let score = consistency + evidence + trend + transparency;
-
     score -= sectorRiskFloor[sector] || 0;
-    const multiplier = countryBasedMultiplier[detectedCountry] || countryBasedMultiplier["Default"];
-    score *= multiplier;
-    const gridIntensity = gridIntensityByCountry[detectedCountry] || gridIntensityByCountry["Default"];
-    score -= gridIntensity * 10;
-
-    score = Math.max(0, Math.min(100, Math.round(score * 10) / 10));
+    score *= countryBasedMultiplier[country] || 1;
+    score -= (gridIntensityByCountry[country] || 0.5) * 10;
+    score = Math.max(0, Math.min(100, Math.round(score)));
 
     const risk = classifyRisk(score);
-    const riskLevel = risk.level;
 
+    // ── Chart ──────────────────────────────────────────────────
     const ctx = document.getElementById('credibility-chart').getContext('2d');
     if (credChart) credChart.destroy();
     credChart = new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: ['Consistency', 'Evidence', 'Trend', 'Transparency', 'Sector Adjustment', 'Country Multiplier', 'Grid Intensity'],
+            labels: ['Consistency','Evidence','Trend','Transparency','Sector Adj.','Country Adj.','Grid Intensity'],
             datasets: [{
-                label: 'ESG Credibility Breakdown',
-                data: [consistency, evidence, trend, transparency, -sectorRiskFloor[sector], multiplier * 10, -gridIntensity * 50],
-                backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                label: 'Credibility Breakdown',
+                data: [consistency, evidence, trend, transparency, -(sectorRiskFloor[sector]||0), (countryBasedMultiplier[country]||1)*10, -(gridIntensityByCountry[country]||0.5)*50],
+                backgroundColor: 'rgba(52,152,219,0.2)',
                 borderColor: '#3498db',
                 borderWidth: 2
             }]
         },
         options: {
             responsive: true,
-            scales: { r: { min: -50, max: 50 } },
-            plugins: { title: { display: true, text: 'ESG Credibility Breakdown' } }
+            scales: { r: { min: -60, max: 60 } }
         }
     });
 
+    // ── Badge ──────────────────────────────────────────────────
     const badge = document.getElementById('risk-badge');
+    badge.textContent = `Score: ${score}% (${risk.level} Risk)`;
     badge.style.background = risk.bg;
     badge.style.color = risk.color;
-    badge.textContent = `Credibility Score: ${score.toFixed(1)}% (${riskLevel} Risk)`;
 
-    let insights = `<strong>Sector: ${sector} | Year: ${year}</strong><br>`;
-    insights += `ESG Credibility Score: ${score.toFixed(1)}%<br>`;
-    insights += `Red Flags: ${mismatches.length}<br>`;
-    insights += `Country Multiplier Applied: x${multiplier.toFixed(2)} (${detectedCountry} regulations)<br>`;
-    insights += `Grid Carbon Intensity: ${gridIntensity.toFixed(2)} kg CO2/kWh (Adjusted for ${detectedCountry})<br><br>`;
-    document.getElementById('insights').innerHTML = insights;
+    // ── Insights ───────────────────────────────────────────────
+    document.getElementById('insights').innerHTML = `
+        <strong>Sector:</strong> ${sector} | <strong>Year:</strong> ${year}<br>
+        <strong>Score:</strong> ${score}% | <strong>Red flags:</strong> ${mismatches.length}<br>
+        <strong>Country:</strong> ${country} (multiplier ×${(countryBasedMultiplier[country]||1).toFixed(2)})
+    `;
 
-    let flags = '<h3>Red Flags & Evidence</h3><ul>';
+    // ── Red flags ──────────────────────────────────────────────
+    let flagsHtml = '<h3>Red Flags</h3><ul>';
     mismatches.forEach(m => {
-        flags += `<li class="claim-red">${m.claimType} (Confidence: ${(m.confidence * 100).toFixed(0)}%) - Misalignment detected.</li>`;
+        flagsHtml += `<li class="claim-red">${m.claimType} (${(m.confidence*100).toFixed(0)}% conf.)</li>`;
     });
-    if (mismatches.length === 0) flags += '<li style="color:#27ae60;">No major red flags detected — strong alignment observed.</li>';
-    flags += '</ul>';
-    document.getElementById('red-flags').innerHTML = flags;
+    flagsHtml += mismatches.length ? '' : '<li style="color:#27ae60;">No major red flags detected</li>';
+    flagsHtml += '</ul>';
+    document.getElementById('red-flags').innerHTML = flagsHtml;
 
-    let claimAnalysis = '<h3>Claim Analysis</h3>';
-    const claimsSentences = claimsText.split('.').filter(s => s.trim());
-    claimsSentences.forEach(sentence => {
-        const matchedCat = parsedClaims.find(cat => cat.keyWords.some(kw => sentence.toLowerCase().includes(kw.toLowerCase())));
-        const highlightClass = matchedCat && mismatches.some(m => m.claimType === matchedCat.claimType) ? 'claim-red' : matchedCat ? 'claim-highlight' : '';
-        claimAnalysis += `<p class="${highlightClass}">${sentence.trim()} (Confidence: ${matchedCat ? (matchedCat.confidence * 100).toFixed(0) : 0}%)</p>`;
-    });
-    document.getElementById('claim-analysis').innerHTML = claimAnalysis;
-
-    let summary = '<h3>Auditor\'s Commentary</h3>';
-    summary += '<p>This assessment, based on operational data and claims, indicates ';
-    summary += riskLevel === 'High' ? 'significant' : riskLevel === 'Moderate' ? 'moderate' : 'low';
-    summary += ` misalignment risks. In ${detectedCountry}, with its ${multiplier > 1 ? 'stringent' : 'lenient'} regulations, key concerns include ${mismatches.map(m => m.claimType).join(', ') || 'none'}. `;
-    summary += 'Recommendations: Conduct independent audits on Scope 3 emissions, enhance data transparency, and align operations with international standards like EU CSRD or UN SDGs to mitigate reputational and regulatory exposure.</p>';
-    document.getElementById('auditor-summary').innerHTML = summary;
-
+    // ── Map ────────────────────────────────────────────────────
     if (map) map.remove();
-    map = L.map('map').setView(location, 5);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-    L.marker(location).addTo(map).bindPopup(`Asset Location - Risk: ${riskLevel} | Country: ${detectedCountry}`);
+    map = L.map('map').setView(loc, 6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+    L.marker(loc).addTo(map).bindPopup(`<b>${sector}</b><br>Risk: ${risk.level}`);
 
-    if (detectedCountry === "Germany") {
-        L.circle([51.1657, 10.4515], {radius: 200000, color: 'orange'}).addTo(map).
+    // ── Auditor summary (placeholder) ──────────────────────────
+    document.getElementById('auditor-summary').innerHTML = `
+        <h3>Auditor Summary</h3>
+        <p>Overall credibility: ${risk.level}. Main concern${mismatches.length===1?'':'s'}: ${mismatches.map(m=>m.claimType).join(', ')||'none detected'}. Recommend third-party verification.</p>
+    `;
+}
+</script>
+
+</body>
+</html>
