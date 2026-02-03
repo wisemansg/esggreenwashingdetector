@@ -332,8 +332,8 @@
 
         <div class="section">
             <h3 class="tooltip">📅 Time Period <span class="tooltiptext">Select years for trend analysis.</span></h3>
-            <input type="range" id="time-slider" min="2019" max="2024" value="2024" step="1">
-            <div id="slider-value">Year: 2024</div>
+            <input type="range" id="time-slider" min="2019" max="2025" value="2025" step="1">
+            <div id="slider-value">Year: 2025</div>
         </div>
 
         <button id="analyze">Analyze ESG Credibility</button>
@@ -363,425 +363,171 @@
 // EXPANDED DATA FOR REALISM - Based on 2024/2025 global standards
 // ────────────────────────────────────────────────
 
-// Expanded ESG categories with realistic checks for misalignment
 const esgCategories = [
-    {claimType: "emission reduction", keyWords: ["reduced emissions", "lower CO2", "cleaner electricity", "energy efficiency"], operationalCheck: (data, sector) => data.energyUse < (sector === "Oil & Gas" ? 5000 : sector === "Heavy Industry & Manufacturing" ? 6500 : 7000) && data.unplannedRepairs < 4, scope3Check: true},
-    {claimType: "asset lifetime extension", keyWords: ["extend asset lifetime", "longer asset life", "predictive maintenance", "corrosion protection", "optimizing maintenance", "minimizing asset replacement"], operationalCheck: (data, sector) => data.assetAge > (sector === "Construction & Infrastructure" ? 10 : 8) && data.maintenanceFrequency > 3 && data.assetReplacementFrequency < 2 && data.inspectionBacklog < 2},
-    {claimType: "sustainability commitment", keyWords: ["committed to sustainability", "reducing downtime", "low-carbon", "environmental resilience"], operationalCheck: (data, sector) => data.downtimeEvents < 4 && data.unplannedRepairs < 3},
-    {claimType: "general green claims", keyWords: ["green", "sustainable", "eco-friendly", "net zero"], operationalCheck: (data, sector) => data.energyUse < 5500 && data.downtimeEvents < 3},
-    {claimType: "waste reduction", keyWords: ["reduced waste", "recycling"], operationalCheck: (data, sector) => data.assetReplacementFrequency < 2},
-    {claimType: "biodiversity protection", keyWords: ["biodiversity", "environmental protection"], operationalCheck: (data, sector) => true}, // Placeholder for realism
-    {claimType: "social responsibility", keyWords: ["community", "social impact"], operationalCheck: (data, sector) => true},
-    {claimType: "governance transparency", keyWords: ["transparent reporting", "governance"], operationalCheck: (data, sector) => data.inspectionBacklog < 1},
-    {claimType: "renewable energy adoption", keyWords: ["renewable energy", "clean energy"], operationalCheck: (data, sector) => data.energyUse < 5000},
-    {claimType: "supply chain sustainability", keyWords: ["sustainable supply chain", "ethical sourcing"], operationalCheck: (data, sector) => true},
-    {claimType: "water conservation", keyWords: ["water efficiency", "reduced water use"], operationalCheck: (data, sector) => true},
-    {claimType: "circular economy", keyWords: ["circular economy", "reuse"], operationalCheck: (data, sector) => data.assetReplacementFrequency < 2.5},
-    {claimType: "human rights", keyWords: ["human rights", "labor standards"], operationalCheck: (data, sector) => true},
-    {claimType: "diversity inclusion", keyWords: ["diversity", "inclusion"], operationalCheck: (data, sector) => true},
-    {claimType: "anti-corruption", keyWords: ["anti-corruption", "ethics"], operationalCheck: (data, sector) => true},
-    {claimType: "climate adaptation", keyWords: ["climate resilience", "adaptation"], operationalCheck: (data, sector) => data.downtimeEvents < 5},
-    {claimType: "decarbonization", keyWords: ["decarbonization", "low-carbon"], operationalCheck: (data, sector) => data.energyUse < 6500},
-    {claimType: "energy transition", keyWords: ["energy transition", "renewable transition"], operationalCheck: (data, sector) => true},
-    {claimType: "sustainable finance", keyWords: ["green bonds", "sustainable finance"], operationalCheck: (data, sector) => true},
-    {claimType: "stakeholder engagement", keyWords: ["stakeholder engagement", "community involvement"], operationalCheck: (data, sector) => true},
-    {claimType: "health safety", keyWords: ["health and safety", "HSE"], operationalCheck: (data, sector) => data.downtimeEvents < 4},
-    {claimType: "innovation sustainability", keyWords: ["sustainable innovation", "R&D for sustainability"], operationalCheck: (data, sector) => true},
-    {claimType: "responsible sourcing", keyWords: ["responsible sourcing", "ethical materials"], operationalCheck: (data, sector) => true},
-    {claimType: "product stewardship", keyWords: ["product lifecycle", "stewardship"], operationalCheck: (data, sector) => data.assetAge > 9},
-    // Additional categories for heavy industry, oil & gas, construction
-    {claimType: "pollution control", keyWords: ["pollution", "emissions control", "air quality"], operationalCheck: (data, sector) => data.energyUse < 6000 && data.downtimeEvents < 4},
-    {claimType: "safety management", keyWords: ["safety", "incident reduction"], operationalCheck: (data, sector) => data.unplannedRepairs < 3 && data.downtimeEvents < 3},
-    {claimType: "community impact", keyWords: ["community impacts", "social license"], operationalCheck: (data, sector) => true},
-    {claimType: "methane leakage", keyWords: ["methane", "leak detection"], operationalCheck: (data, sector) => sector === "Oil & Gas" ? data.unplannedRepairs < 2 : true},
-    {claimType: "flaring reduction", keyWords: ["flaring", "zero flaring"], operationalCheck: (data, sector) => sector === "Oil & Gas" ? data.energyUse < 5500 : true},
-    {claimType: "supply chain auditing", keyWords: ["supply chain auditing", "supplier ESG"], operationalCheck: (data, sector) => data.inspectionBacklog < 1},
-    {claimType: "carbon capture", keyWords: ["carbon capture", "CCS"], operationalCheck: (data, sector) => sector === "Oil & Gas" ? data.energyUse < 6000 : true},
-    {claimType: "sustainable building", keyWords: ["sustainable building", "green construction"], operationalCheck: (data, sector) => sector === "Construction & Infrastructure" ? data.energyUse < 4500 : true},
-    {claimType: "electrification", keyWords: ["electrification", "electric transition"], operationalCheck: (data, sector) => data.energyUse < 5500},
-    // Add 50+ more for depth and realism
-    {claimType: "zero waste", keyWords: ["zero waste", "landfill diversion"], operationalCheck: (data, sector) => data.assetReplacementFrequency < 1},
-    {claimType: "sustainable transport", keyWords: ["sustainable transport", "electric fleet"], operationalCheck: (data, sector) => true},
-    {claimType: "employee well-being", keyWords: ["employee well-being", "work-life balance"], operationalCheck: (data, sector) => true},
-    {claimType: "conflict minerals", keyWords: ["conflict minerals", "responsible minerals"], operationalCheck: (data, sector) => true},
-    {claimType: "fair trade", keyWords: ["fair trade", "ethical trade"], operationalCheck: (data, sector) => true},
-    {claimType: "biodiversity offsets", keyWords: ["biodiversity offsets", "habitat restoration"], operationalCheck: (data, sector) => true},
-    {claimType: "water stewardship", keyWords: ["water stewardship", "water risk management"], operationalCheck: (data, sector) => true},
-    {claimType: "gender equality", keyWords: ["gender equality", "women empowerment"], operationalCheck: (data, sector) => true},
-    {claimType: "indigenous rights", keyWords: ["indigenous rights", "FPIC"], operationalCheck: (data, sector) => true},
-    {claimType: "anti-bribery", keyWords: ["anti-bribery", "compliance"], operationalCheck: (data, sector) => true},
-    {claimType: "data privacy", keyWords: ["data privacy", "GDPR compliance"], operationalCheck: (data, sector) => true},
-    {claimType: "cybersecurity", keyWords: ["cybersecurity", "data protection"], operationalCheck: (data, sector) => true},
-    {claimType: "product safety", keyWords: ["product safety", "quality control"], operationalCheck: (data, sector) => data.unplannedRepairs < 2},
-    {claimType: "customer satisfaction", keyWords: ["customer satisfaction", "service quality"], operationalCheck: (data, sector) => true},
-    {claimType: "innovation investment", keyWords: ["innovation investment", "R&D spend"], operationalCheck: (data, sector) => true},
-    {claimType: "tax transparency", keyWords: ["tax transparency", "fair tax"], operationalCheck: (data, sector) => true},
-    {claimType: "lobbying disclosure", keyWords: ["lobbying disclosure", "political contributions"], operationalCheck: (data, sector) => true},
-    {claimType: "executive compensation", keyWords: ["executive compensation", "pay ratio"], operationalCheck: (data, sector) => true},
-    {claimType: "board diversity", keyWords: ["board diversity", "independent directors"], operationalCheck: (data, sector) => true},
-    {claimType: "whistleblower protection", keyWords: ["whistleblower", "reporting mechanisms"], operationalCheck: (data, sector) => true},
-    // Continue adding for bigness, ensuring practical checks
+    {type: "emission reduction", keywords: ["reduced emissions", "lower co2", "emissions intensity", "decarbonization", "energy efficiency", "cleaner electricity", "furnace efficiency", "process optimization"], check: (d, s, y) => {
+        const base = s.includes("Oil") ? 5200 : s.includes("Heavy") ? 6800 : 7200;
+        const yearPenalty = y >= 2025 ? 300 : 0; // 2025 stricter expectation
+        return d.energyUse < (base - yearPenalty) && d.unplannedRepairs < 4;
+    }},
+    {type: "asset lifetime extension", keywords: ["extended asset", "longer asset life", "asset lifetimes", "predictive maintenance", "maintenance strategies", "reduced unplanned downtime", "corrosion protection"], check: (d, s, y) => {
+        const ageMin = s.includes("Heavy") ? 9.5 : 8.5;
+        const repMax = y >= 2025 ? 2.2 : 2.5;
+        return d.assetAge > ageMin && d.maintenanceFrequency >= 3 && d.assetReplacementFrequency <= repMax && d.inspectionBacklog <= 2;
+    }},
+    {type: "sustainability commitment", keywords: ["committed to sustainability", "aligning with", "eu industrial", "decarbonization goals", "environmental resilience"], check: (d, s, y) => d.downtimeEvents < (y >= 2025 ? 4 : 5) && d.unplannedRepairs < 4},
+    {type: "general green claims", keywords: ["green", "sustainable", "eco-friendly", "net zero", "climate neutral"], check: (d, s, y) => d.energyUse < (y >= 2025 ? 6200 : 6500) && d.downtimeEvents < 3}
+    // You can keep adding more categories — more = deeper analysis
 ];
 
 const sectorRiskFloor = {
-    "Oil & Gas": 30,
-    "Offshore Wind & Marine": 10,
-    "Construction & Infrastructure": 15,
-    "Heavy Industry & Manufacturing": 25,
-    "Real Estate & Facilities": 5
+    "Oil & Gas": 34,                // even stricter in 2025 context
+    "Heavy Industry & Manufacturing": 30,
+    "Construction & Infrastructure": 24,
+    "Offshore Wind & Marine": 14,
+    "Real Estate & Facilities": 20
 };
 
 const countryBasedMultiplier = {
-    "Norway": 1.2,
-    "Germany": 1.15,
-    "EU": 1.15,
-    "USA": 1.0,
-    "China": 0.9,
-    "India": 0.95,
-    "Brazil": 1.05,
-    "Australia": 1.1,
-    "France": 1.12,
-    "Spain": 1.1,
-    "Italy": 1.1,
-    "UK": 1.08,
-    "Sweden": 1.18,
-    "Finland": 1.17,
-    "Denmark": 1.16,
-    "Netherlands": 1.14,
-    "Belgium": 1.13,
-    "Switzerland": 1.11,
-    "Austria": 1.13,
-    "Poland": 1.09,
-    "Russia": 0.85,
-    "Japan": 1.05,
-    "South Korea": 1.04,
-    "Canada": 1.06,
-    "Mexico": 1.02,
-    "South Africa": 1.0,
-    "Saudi Arabia": 0.9,
-    "UAE": 0.92,
-    "Qatar": 0.9,
-    "Egypt": 0.88,
-    "Nigeria": 0.85,
-    "Kenya": 0.87,
-    "Indonesia": 0.93,
-    "Malaysia": 0.94,
-    "Singapore": 1.05,
-    "Thailand": 0.92,
-    "Vietnam": 0.9,
-    "Philippines": 0.91,
-    "New Zealand": 1.07,
-    "Argentina": 0.95,
-    "Chile": 1.0,
-    "Peru": 0.96,
-    "Colombia": 0.97,
-    "Venezuela": 0.8,
-    "Turkey": 0.98,
-    "Greece": 1.02,
-    "Portugal": 1.03,
-    "Ireland": 1.04,
-    "Iceland": 1.15,
-    "Default": 1.0
+    "Norway": 1.28,
+    "Germany": 1.20,
+    "EU": 1.18,
+    "Sweden": 1.25,
+    "Denmark": 1.22,
+    "Netherlands": 1.19,
+    "France": 1.16,
+    "USA": 1.08,
+    "China": 0.90,
+    "India": 0.94,
+    "Default": 1.00
 };
 
-const gridIntensityByCountry = {
-    "Norway": 0.02,
-    "Germany": 0.35,
-    "USA": 0.4,
-    "China": 0.6,
-    "India": 0.7,
-    "Brazil": 0.15,
-    "Australia": 0.65,
-    "France": 0.06,
-    "Spain": 0.2,
-    "Italy": 0.3,
-    "UK": 0.25,
-    "Sweden": 0.03,
-    "Finland": 0.1,
-    "Denmark": 0.15,
-    "Netherlands": 0.4,
-    "Belgium": 0.2,
-    "Switzerland": 0.05,
-    "Austria": 0.2,
-    "Poland": 0.7,
-    "Russia": 0.4,
-    "Japan": 0.45,
-    "South Korea": 0.5,
-    "Canada": 0.15,
-    "Mexico": 0.45,
-    "South Africa": 0.85,
-    "Saudi Arabia": 0.6,
-    "UAE": 0.5,
-    "Qatar": 0.55,
-    "Egypt": 0.4,
-    "Nigeria": 0.5,
-    "Kenya": 0.1,
-    "Indonesia": 0.65,
-    "Malaysia": 0.5,
-    "Singapore": 0.4,
-    "Thailand": 0.45,
-    "Vietnam": 0.55,
-    "Philippines": 0.5,
-    "New Zealand": 0.15,
-    "Argentina": 0.3,
-    "Chile": 0.25,
-    "Peru": 0.2,
-    "Colombia": 0.15,
-    "Venezuela": 0.2,
-    "Turkey": 0.4,
-    "Greece": 0.35,
-    "Portugal": 0.25,
-    "Ireland": 0.3,
-    "Iceland": 0.01,
-    "Default": 0.5
+const gridCarbonIntensity = {
+    "Norway": 0.018,
+    "Germany": 0.340,    // 2025 projection — continued coal phase-out
+    "EU": 0.260,
+    "Sweden": 0.022,
+    "Denmark": 0.130,
+    "Netherlands": 0.380,
+    "France": 0.055,
+    "USA": 0.360,
+    "China": 0.550,
+    "India": 0.680,
+    "Default": 0.45
 };
 
-// Expanded country bounds for global coverage
-const countryBounds = [
-    {country: "Norway", bounds: [58, 71, 5, 31]},
-    {country: "Germany", bounds: [47, 55, 6, 15]},
-    {country: "USA", bounds: [25, 49, -125, -67]},
-    {country: "China", bounds: [18, 54, 73, 135]},
-    {country: "India", bounds: [8, 37, 68, 97]},
-    {country: "Brazil", bounds: [-33, 5, -73, -35]},
-    {country: "Australia", bounds: [-43, -10, 113, 154]},
-    {country: "France", bounds: [42, 51, -5, 8]},
-    {country: "Spain", bounds: [36, 43, -9, 4]},
-    {country: "Italy", bounds: [36, 47, 6, 18]},
-    {country: "UK", bounds: [50, 59, -8, 2]},
-    {country: "Sweden", bounds: [55, 69, 11, 24]},
-    {country: "Finland", bounds: [60, 70, 20, 31]},
-    {country: "Denmark", bounds: [55, 58, 8, 15]},
-    {country: "Netherlands", bounds: [51, 54, 3, 7]},
-    {country: "Belgium", bounds: [50, 51, 3, 6]},
-    {country: "Switzerland", bounds: [46, 48, 6, 10]},
-    {country: "Austria", bounds: [47, 49, 9, 17]},
-    {country: "Poland", bounds: [49, 55, 14, 24]},
-    {country: "Russia", bounds: [41, 82, 19, 180]},
-    {country: "Japan", bounds: [24, 46, 122, 146]},
-    {country: "South Korea", bounds: [33, 39, 126, 130]},
-    {country: "Canada", bounds: [42, 83, -141, -52]},
-    {country: "Mexico", bounds: [14, 33, -117, -86]},
-    {country: "South Africa", bounds: [-35, -22, 16, 33]},
-    {country: "Saudi Arabia", bounds: [16, 32, 35, 56]},
-    {country: "UAE", bounds: [22, 26, 51, 56]},
-    {country: "Qatar", bounds: [24, 26, 50, 52]},
-    {country: "Egypt", bounds: [22, 32, 25, 35]},
-    {country: "Nigeria", bounds: [4, 14, 3, 15]},
-    {country: "Kenya", bounds: [-5, 5, 34, 42]},
-    {country: "Indonesia", bounds: [-11, 6, 95, 141]},
-    {country: "Malaysia", bounds: [1, 7, 100, 119]},
-    {country: "Singapore", bounds: [1, 1.5, 103, 104]},
-    {country: "Thailand", bounds: [5, 20, 97, 106]},
-    {country: "Vietnam", bounds: [8, 24, 102, 110]},
-    {country: "Philippines", bounds: [5, 21, 117, 127]},
-    {country: "New Zealand", bounds: [-47, -34, 166, 179]},
-    {country: "Argentina", bounds: [-55, -21, -73, -53]},
-    {country: "Chile", bounds: [-56, -17, -76, -66]},
-    {country: "Peru", bounds: [-18, 0, -81, -68]},
-    {country: "Colombia", bounds: [-4, 12, -79, -67]},
-    {country: "Venezuela", bounds: [1, 12, -73, -60]},
-    {country: "Turkey", bounds: [36, 42, 26, 45]},
-    {country: "Greece", bounds: [35, 42, 19, 28]},
-    {country: "Portugal", bounds: [37, 42, -10, -6]},
-    {country: "Ireland", bounds: [51, 55, -11, -6]},
-    {country: "Iceland", bounds: [63, 67, -25, -13]},
-    // Add more for global coverage
-];
-
-// Function to detect country from lat/lon
-function getCountryFromLatLon(lat, lon) {
-    for (const c of countryBounds) {
-        if (lat >= c.bounds[0] && lat <= c.bounds[1] && lon >= c.bounds[2] && lon <= c.bounds[3]) {
-            return c.country;
-        }
-    }
+// Rough country detection (expanded)
+function detectCountry(lat, lon) {
+    if (lat >= 47 && lat <= 55 && lon >= 6 && lon <= 15) return "Germany";
+    if (lat >= 58 && lat <= 71 && lon >= 5 && lon <= 31) return "Norway";
+    if (lat >= 55 && lat <= 69 && lon >= 11 && lon <= 24) return "Sweden";
+    if (lat >= 54.5 && lat <= 57.8 && lon >= 8 && lon <= 15) return "Denmark";
+    if (lat >= 50 && lat <= 53.5 && lon >= 3.3 && lon <= 7.2) return "Netherlands";
+    if (lat >= 41 && lat <= 51 && lon >= -5 && lon <= 9.5) return "France";
+    // Add more countries as needed...
     return "Default";
 }
 
-// Theme selector
-document.getElementById('theme-select').addEventListener('change', () => document.body.className = document.getElementById('theme-select').value);
+// ────────────────────────────────────────────────
+// UI EVENT LISTENERS
+// ────────────────────────────────────────────────
 
-// Analyze button
+document.getElementById('theme-select').addEventListener('change', () => {
+    document.body.className = document.getElementById('theme-select').value;
+});
+
+document.getElementById('time-slider').addEventListener('input', (e) => {
+    document.getElementById('slider-value').textContent = `Reporting Year: ${e.target.value}`;
+});
+
 document.getElementById('analyze').addEventListener('click', runAnalysis);
 
-// Reset
 document.getElementById('reset').addEventListener('click', () => {
-    document.getElementById('sector-select').selectedIndex = 0;
-    document.getElementById('esg-claims').value = '';
-    document.getElementById('operational-data').value = '';
-    document.getElementById('asset-location').value = '59.9139,10.7522';
-    document.getElementById('time-slider').value = 2024;
-    document.getElementById('slider-value').textContent = 'Year: 2024';
-    document.getElementById('insights').innerHTML = '';
-    document.getElementById('red-flags').innerHTML = '';
-    document.getElementById('claim-analysis').innerHTML = '';
-    document.getElementById('auditor-summary').innerHTML = '';
-    document.getElementById('risk-badge').textContent = '—';
+    document.getElementById('sector-select').value = "Heavy Industry & Manufacturing";
+    document.getElementById('esg-claims').value = "";
+    document.getElementById('operational-data').value = "";
+    document.getElementById('asset-location').value = "52.5200,13.4050";
+    document.getElementById('time-slider').value = 2025;
+    document.getElementById('slider-value').textContent = "Reporting Year: 2025";
+
+    document.getElementById('risk-badge').textContent = "—";
+    document.getElementById('insights').innerHTML = "";
+    document.getElementById('red-flags').innerHTML = "";
+    document.getElementById('claim-analysis').innerHTML = "";
+    document.getElementById('auditor-summary').innerHTML = "";
+
     if (credChart) credChart.destroy();
     if (map) map.remove();
-    credChart = null;
-    map = null;
 });
 
-let credChart;
-let map;
+// ────────────────────────────────────────────────
+// MAIN ANALYSIS FUNCTION
+// ────────────────────────────────────────────────
 
-// Time slider
-document.getElementById('time-slider').addEventListener('input', (e) => {
-    document.getElementById('slider-value').textContent = `Year: ${e.target.value}`;
-    // Can trigger re-analysis if needed, but for now, simulated
-});
+let credChart, map;
 
 function runAnalysis() {
     const sector = document.getElementById('sector-select').value;
-    const claimsText = document.getElementById('esg-claims').value.toLowerCase();
+    const claimsText = document.getElementById('esg-claims').value.trim();
     let operational;
     try {
-        operational = JSON.parse(document.getElementById('operational-data').value);
+        operational = JSON.parse(document.getElementById('operational-data').value || '{}');
     } catch (e) {
-        alert('Invalid operational data JSON');
+        alert("Invalid JSON in Operational Data field.");
         return;
     }
-    const location = document.getElementById('asset-location').value.split(',').map(Number);
+
+    const [lat, lon] = document.getElementById('asset-location').value.split(',').map(n => parseFloat(n.trim()));
     const year = parseInt(document.getElementById('time-slider').value);
 
-    const detectedCountry = getCountryFromLatLon(location[0], location[1]);
-
-    // Parse claims with confidence
-    const parsedClaims = esgCategories.map(cat => ({
-        ...cat,
-        matched: cat.keyWords.some(kw => claimsText.includes(kw)),
-        confidence: Math.random() * 0.4 + 0.6 // Simulated confidence 60-100%
-    })).filter(cat => cat.matched);
-
-    // Mismatch analytics with sector and country adjustment
-    const mismatches = parsedClaims.filter(cat => !cat.operationalCheck(operational, sector));
-
-    // Add inherent flags based on sector and country for realism
-    if (mismatches.length === 0 && sectorRiskFloor[sector] > 10) {
-        mismatches.push({claimType: "Inherent sector exposure (e.g., fossil fuel dependency)", confidence: 0.8});
+    if (!lat || !lon || isNaN(lat) || isNaN(lon)) {
+        alert("Please enter valid latitude and longitude.");
+        return;
     }
 
-    // Credibility score with adjustments
-    let consistency = (parsedClaims.length - mismatches.length) / parsedClaims.length * 30 || 0;
-    const evidence = Object.values(operational).reduce((sum, val) => sum + (val > 0 ? 1 : 0), 0) / Object.keys(operational).length * 30;
-    const trend = (year - 2019) / 5 * 20; // Realistic trend improvement
-    const transparency = parsedClaims.reduce((sum, cat) => sum + cat.confidence, 0) / parsedClaims.length * 20 || 20;
-    let score = consistency + evidence + trend + transparency;
+    const country = detectCountry(lat, lon);
+    const multiplier = countryBasedMultiplier[country] || countryBasedMultiplier["Default"];
+    const gridIntensity = gridCarbonIntensity[country] || gridCarbonIntensity["Default"];
 
-    // Apply sector risk floor
-    score -= sectorRiskFloor[sector] || 0;
-
-    // Apply country multiplier
-    const multiplier = countryBasedMultiplier[detectedCountry] || countryBasedMultiplier["Default"];
-    score *= multiplier;
-
-    // Grid intensity adjustment for emissions realism
-    const gridIntensity = gridIntensityByCountry[detectedCountry] || gridIntensityByCountry["Default"];
-    if (parsedClaims.length > 0) {
-        score -= gridIntensity * 10; // Penalize high-intensity grids
-    }
-
-    score = Math.max(0, Math.min(100, score));
-
-    // Risk
-    const risk = classifyRisk(score);
-    const riskLevel = risk.level;
-
-    // Chart - Expanded with more components
-    const ctx = document.getElementById('credibility-chart').getContext('2d');
-    if (credChart) credChart.destroy();
-    credChart = new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: ['Consistency', 'Evidence', 'Trend', 'Transparency', 'Sector Adjustment', 'Country Multiplier', 'Grid Intensity'],
-            datasets: [{
-                label: 'ESG Credibility Breakdown',
-                data: [consistency, evidence, trend, transparency, -sectorRiskFloor[sector], multiplier * 10, -gridIntensity * 50],
-                backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                borderColor: '#3498db',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                r: {min: -50, max: 50}
-            },
-            plugins: {
-                title: {display: true, text: 'ESG Credibility Breakdown'}
-            }
+    // ─── Parse claims ────────────────────────────────────────
+    const parsedClaims = [];
+    esgCategories.forEach(cat => {
+        const found = cat.keywords.filter(kw => claimsText.toLowerCase().includes(kw));
+        if (found.length > 0) {
+            parsedClaims.push({
+                type: cat.type,
+                confidence: Math.min(1, (found.length / cat.keywords.length) * 0.8 + 0.2),
+                matchedKeywords: found
+            });
         }
     });
 
-    // Badge
-    const badge = document.getElementById('risk-badge');
-    badge.style.background = risk.bg;
-    badge.style.color = risk.color;
-    badge.textContent = `Credibility Score: ${score.toFixed(1)}% (${riskLevel} Risk)`;
+    // ─── Mismatch detection with 2025 tightening ─────────────
+    const mismatches = parsedClaims.filter(claim => !claim.check?.(operational, sector, year));
 
-    // Insights - Expanded, practical
-    let insights = `<strong>Sector: ${sector} | Year: ${year}</strong><br>`;
-    insights += `ESG Credibility Score: ${score.toFixed(1)}%<br>`;
-    insights += `Red Flags: ${mismatches.length}<br>`;
-    insights += `Country Multiplier Applied: x${multiplier.toFixed(2)} (${detectedCountry} regulations)<br>`;
-    insights += `Grid Carbon Intensity: ${gridIntensity.toFixed(2)} kg CO2/kWh (Adjusted for ${detectedCountry})<br><br>`;
-    document.getElementById('insights').innerHTML = insights;
-
-    // Red flags - Expanded with evidence
-    let flags = '<h3>Red Flags & Evidence</h3><ul>';
-    mismatches.forEach(m => {
-        flags += `<li class="claim-red">${m.claimType} (Confidence: ${(m.confidence * 100).toFixed(0)}%) - Misalignment detected. Evidence: ${Object.keys(operational)[Math.floor(Math.random() * Object.keys(operational).length)]}</li>`;
-    });
-    flags += '</ul>';
-    document.getElementById('red-flags').innerHTML = flags;
-
-    // Claim analysis with highlighting - Deep, sentence-level
-    let claimAnalysis = '<h3>Claim Analysis</h3>';
-    const claimsSentences = claimsText.split('.').filter(s => s.trim());
-    claimsSentences.forEach(sentence => {
-        const matchedCat = parsedClaims.find(cat => cat.keyWords.some(kw => sentence.includes(kw)));
-        const highlightClass = matchedCat && mismatches.some(m => m.claimType === matchedCat.claimType) ? 'claim-red' : matchedCat ? 'claim-highlight' : '';
-        claimAnalysis += `<p class="${highlightClass}">${sentence.trim()} (Confidence: ${matchedCat ? (matchedCat.confidence * 100).toFixed(0) : 0}%)</p>`;
-    });
-    document.getElementById('claim-analysis').innerHTML = claimAnalysis;
-
-    // Auditor summary - Auto-generated, realistic, unbiased
-    let summary = '<h3>Auditor\'s Commentary</h3>';
-    summary += '<p>This assessment, based on operational data and claims, indicates ';
-    summary += riskLevel === 'High' ? 'significant' : riskLevel === 'Moderate' ? 'moderate' : 'low';
-    summary += ` misalignment risks. In ${detectedCountry}, with its ${multiplier > 1 ? 'stringent' : 'lenient'} regulations, key concerns include ${mismatches.map(m => m.claimType).join(', ') || 'none'}. `;
-    summary += 'Recommendations: Conduct independent audits on Scope 3 emissions, enhance data transparency, and align operations with international standards like EU CSRD or UN SDGs to mitigate reputational and regulatory exposure.</p>';
-    document.getElementById('auditor-summary').innerHTML = summary;
-
-    // Map - Expanded with realistic hotspots, global
-    if (map) map.remove();
-    map = L.map('map').setView(location, 5); // Global-appropriate zoom
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-    L.marker(location).addTo(map).bindPopup(`Asset Location - Risk: ${riskLevel} | Country: ${detectedCountry}`);
-
-    // Add country-specific hotspots
-    if (detectedCountry === "Germany") {
-        L.circle([51.1657, 10.4515], {radius: 200000, color: 'orange'}).addTo(map).bindPopup('Central Germany - Industrial Hub');
-    } else if (detectedCountry === "USA") {
-        L.circle([29.76, -95.37], {radius: 150000, color: 'red'}).addTo(map).bindPopup('Houston Area - O&G Risk Zone');
+    // Sector-specific minimum flags (stronger in 2025)
+    if (mismatches.length === 0 && sectorRiskFloor[sector] >= 22) {
+        mismatches.push({type: `Inherent ${sector.toLowerCase()} exposure`, confidence: 0.82, evidence: "Sector baseline risk — 2025 regulatory tightening"});
     }
-    // Add more for other countries...
 
-    // Export - Expanded
-    document.getElementById('export-csv').addEventListener('click', () => exportCSV([{sector, detectedCountry, score, riskLevel, mismatches: mismatches.length}]));
-    document.getElementById('export-pdf').addEventListener('click', () => exportPDF(insights + claimAnalysis + flags + summary, mismatches));
-}
+    // ─── Credibility scoring ─────────────────────────────────
+    const totalClaims = parsedClaims.length || 1;
+    let consistency = ((totalClaims - mismatches.length) / totalClaims) * 38;
+    const evidence = (Object.values(operational).filter(v => typeof v === 'number' && !isNaN(v)).length / 7) * 32;
+    let trend = ((year - 2019) / 6) * 20;
+    if (year === 2025) trend *= 1.12; // slight optimism for recent progress (but capped)
+    const transparency = parsedClaims.reduce((sum, c) => sum + c.confidence, 0) / totalClaims * 24;
 
-// Classify risk function
-function classifyRisk(score) {
-    if (score > 80) return {level: "Low", color: "var(--risk-low)", bg: "#e8f5e9"};
-    if (score > 50) return {level: "Moderate", color: "var(--risk-mod)", bg: "#fff3e0"};
-    return {level: "High", color: "var(--risk-high)", bg: "#ffebee"};
-}
+    let score = consistency + evidence + trend + transparency;
+    score -= sectorRiskFloor[sector] || 0;
+    score *= multiplier;
+    score -= gridIntensity * 22; // stronger penalty in 2025 context
 
-</script>
+    score = Math.max(8, Math.min(96, Math.round(score * 10) / 10));
 
-</body>
-</html>
+    // ─── Risk classification ─────────────────────────────────
+    const risk = score > 78 ? {level: "Low", color: "var(--risk-low)", bg: "#e8f5e9"}
+                  : score > 52 ? {level: "Moderate", color: "var(--risk-mod)", bg: "#fff3e0"}
+                  : {level: "High", color: "var(--risk-high)", bg: "#ffebee"};
+
+    // ─── Chart ───────────────────────────────────────────────
+    const ctx = document.getElementById('cred
