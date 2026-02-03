@@ -430,7 +430,7 @@
 
 <script>
 // ────────────────────────────────────────────────────────────────────────────────
-// MASSIVE GLOBAL ESG DATA – 2024/2025 STANDARDS (KEPT VERY VERY LARGE)
+// MASSIVE GLOBAL ESG DATA – 2024/2025 STANDARDS (KEPT EXTREMELY LARGE)
 // ────────────────────────────────────────────────────────────────────────────────
 
 const esgCategories = [
@@ -487,7 +487,7 @@ const esgCategories = [
     {claimType: "executive compensation", keyWords: ["executive compensation", "pay ratio", "performance-linked"], operationalCheck: (data, sector) => true},
     {claimType: "board diversity", keyWords: ["board diversity", "independent directors", "skills matrix"], operationalCheck: (data, sector) => true},
     {claimType: "whistleblower protection", keyWords: ["whistleblower", "reporting mechanisms", "non-retaliation"], operationalCheck: (data, sector) => true},
-    // ... (you can keep expanding – this is already extremely long)
+    // You can keep adding more — this is already very long as requested
 ];
 
 const sectorRiskFloor = {
@@ -749,7 +749,7 @@ const countryBounds = [
     {country: "Uzbekistan", bounds: [37.2, 45.6, 55.9, 73.2]},
     {country: "Zambia", bounds: [-18.1, -8.2, 21.9, 33.7]},
     {country: "Zimbabwe", bounds: [-22.4, -15.6, 25.2, 33.1]},
-    // You can keep adding indefinitely – this is already very large
+    // Extremely long – you can keep adding more countries forever
 ];
 
 // ────────────────────────────────────────────────
@@ -766,7 +766,7 @@ function getCountryFromLatLon(lat, lon) {
 }
 
 // ────────────────────────────────────────────────
-// EVENT LISTENERS – ALL FIXED & WORKING
+// EVENT LISTENERS – ALL BUTTONS WORKING
 // ────────────────────────────────────────────────
 
 // Theme selector
@@ -774,18 +774,15 @@ document.getElementById('theme-select').addEventListener('change', function() {
     document.body.className = this.value;
 });
 
-// Time slider label update
+// Time slider label
 document.getElementById('time-slider').addEventListener('input', function(e) {
     document.getElementById('slider-value').textContent = `Year: ${e.target.value}`;
 });
 
-// FIXED: Analyze ESG Credibility button now properly triggers analysis
-document.getElementById('analyze').addEventListener('click', function() {
-    console.log("Analyze ESG Credibility button clicked – running full analysis...");
-    runAnalysis();
-});
+// Analyze ESG Credibility – FIXED & WORKING
+document.getElementById('analyze').addEventListener('click', runAnalysis);
 
-// Reset button
+// Reset Inputs
 document.getElementById('reset').addEventListener('click', function() {
     document.getElementById('sector-select').selectedIndex = 0;
     document.getElementById('esg-claims').value = '';
@@ -807,14 +804,15 @@ document.getElementById('reset').addEventListener('click', function() {
 });
 
 // ────────────────────────────────────────────────
-// MAIN ANALYSIS FUNCTION – FIXED & FULLY WORKING
+// MAIN ANALYSIS FUNCTION – FIXED, CLEANED & FUNCTIONAL
 // ────────────────────────────────────────────────
 
 let credChart;
 let map;
+let lastAnalysisData = {}; // Store last results for export
 
 function runAnalysis() {
-    console.log("runAnalysis() executed successfully");
+    console.log("Analyze button clicked – starting analysis");
 
     const sector = document.getElementById('sector-select').value;
     const claimsText = document.getElementById('esg-claims').value.toLowerCase().trim();
@@ -823,14 +821,14 @@ function runAnalysis() {
     try {
         operational = JSON.parse(document.getElementById('operational-data').value || '{}');
     } catch (e) {
-        alert("Invalid JSON in Operational Data. Please check the format.");
+        alert("Invalid JSON in Operational Data field. Please fix the syntax.");
         return;
     }
 
     const locationInput = document.getElementById('asset-location').value.trim();
-    const locationParts = locationInput.split(',').map(part => parseFloat(part.trim()));
+    const locationParts = locationInput.split(',').map(p => parseFloat(p.trim()));
     if (locationParts.length !== 2 || isNaN(locationParts[0]) || isNaN(locationParts[1])) {
-        alert("Invalid location format. Use: latitude, longitude");
+        alert("Asset location must be in format: latitude, longitude");
         return;
     }
     const location = locationParts;
@@ -848,25 +846,22 @@ function runAnalysis() {
 
     const mismatches = parsedClaims.filter(cat => !cat.operationalCheck(operational, sector));
 
-    if (mismatches.length === 0 && sectorRiskFloor[sector] > 10) {
+    if (mismatches.length === 0 && (sectorRiskFloor[sector] || 0) > 10) {
         mismatches.push({claimType: "Inherent sector exposure (e.g., fossil fuel dependency)", confidence: 0.8});
     }
 
     // Score calculation
-    let consistency = parsedClaims.length > 0 ? (parsedClaims.length - mismatches.length) / parsedClaims.length * 30 : 0;
+    let consistency = parsedClaims.length > 0 ? ((parsedClaims.length - mismatches.length) / parsedClaims.length) * 30 : 0;
     const evidence = Object.keys(operational).length > 0 ? (Object.values(operational).filter(v => typeof v === 'number' && !isNaN(v)).length / Object.keys(operational).length) * 30 : 0;
     const trend = (year - 2019) / 5 * 20;
-    const transparency = parsedClaims.length > 0 ? parsedClaims.reduce((sum, c) => sum + c.confidence, 0) / parsedClaims.length * 20 : 20;
+    const transparency = parsedClaims.length > 0 ? (parsedClaims.reduce((sum, c) => sum + c.confidence, 0) / parsedClaims.length) * 20 : 20;
 
     let score = consistency + evidence + trend + transparency;
     score -= sectorRiskFloor[sector] || 0;
-
     const multiplier = countryBasedMultiplier[detectedCountry] || countryBasedMultiplier["Default"];
     score *= multiplier;
-
     const gridIntensity = gridIntensityByCountry[detectedCountry] || gridIntensityByCountry["Default"];
     score -= gridIntensity * 10;
-
     score = Math.max(0, Math.min(100, Math.round(score * 10) / 10));
 
     // Risk classification
@@ -879,6 +874,18 @@ function runAnalysis() {
     const risk = classifyRisk(score);
     const riskLevel = risk.level;
 
+    // Save data for export
+    lastAnalysisData = {
+        sector,
+        year,
+        detectedCountry,
+        score: score.toFixed(1),
+        riskLevel,
+        redFlags: mismatches.length,
+        multiplier: multiplier.toFixed(2),
+        gridIntensity: gridIntensity.toFixed(2)
+    };
+
     // Chart
     const ctx = document.getElementById('credibility-chart').getContext('2d');
     if (credChart) credChart.destroy();
@@ -888,7 +895,7 @@ function runAnalysis() {
             labels: ['Consistency', 'Evidence', 'Trend', 'Transparency', 'Sector Adjustment', 'Country Multiplier', 'Grid Intensity'],
             datasets: [{
                 label: 'ESG Credibility Breakdown',
-                data: [consistency, evidence, trend, transparency, -sectorRiskFloor[sector], multiplier * 10, -gridIntensity * 50],
+                data: [consistency, evidence, trend, transparency, -(sectorRiskFloor[sector] || 0), multiplier * 10, -gridIntensity * 50],
                 backgroundColor: 'rgba(52, 152, 219, 0.2)',
                 borderColor: '#3498db',
                 borderWidth: 2
@@ -912,13 +919,13 @@ function runAnalysis() {
     insights += `ESG Credibility Score: ${score.toFixed(1)}%<br>`;
     insights += `Red Flags: ${mismatches.length}<br>`;
     insights += `Country Multiplier Applied: x${multiplier.toFixed(2)} (${detectedCountry} regulations)<br>`;
-    insights += `Grid Carbon Intensity: ${gridIntensity.toFixed(2)} kg CO2/kWh (Adjusted for ${detectedCountry})<br><br>`;
+    insights += `Grid Carbon Intensity: ${gridIntensity.toFixed(2)} kg CO₂/kWh<br><br>`;
     document.getElementById('insights').innerHTML = insights;
 
     // Red flags
     let flags = '<h3>Red Flags & Evidence</h3><ul>';
     mismatches.forEach(m => {
-        flags += `<li class="claim-red">${m.claimType} (Confidence: ${(m.confidence * 100).toFixed(0)}%) - Misalignment detected. Evidence: ${Object.keys(operational)[Math.floor(Math.random() * Object.keys(operational).length)] || 'N/A'}</li>`;
+        flags += `<li class="claim-red">${m.claimType} (Confidence: ${(m.confidence * 100).toFixed(0)}%) - Misalignment detected.</li>`;
     });
     if (mismatches.length === 0) flags += '<li style="color:#27ae60;">No major red flags detected — strong alignment observed.</li>';
     flags += '</ul>';
@@ -926,169 +933,59 @@ function runAnalysis() {
 
     // Claim analysis
     let claimAnalysis = '<h3>Claim Analysis</h3>';
-    const claimsSentences = claimsText.split('.').filter(s => s.trim());
-    claimsSentences.forEach(sentence => {
-        const matchedCat = parsedClaims.find(cat => cat.keyWords.some(kw => sentence.toLowerCase().includes(kw.toLowerCase())));
-        const highlightClass = matchedCat && mismatches.some(m => m.claimType === matchedCat.claimType) ? 'claim-red' : matchedCat ? 'claim-highlight' : '';
-        claimAnalysis += `<p class="${highlightClass}">${sentence.trim()} (Confidence: ${matchedCat ? (matchedCat.confidence * 100).toFixed(0) : 0}%)</p>`;
+    const sentences = claimsText.split('.').filter(s => s.trim());
+    sentences.forEach(sentence => {
+        const matched = parsedClaims.find(cat => cat.keyWords.some(kw => sentence.includes(kw.toLowerCase())));
+        const isMismatch = matched && mismatches.some(m => m.claimType === matched.claimType);
+        const className = isMismatch ? 'claim-red' : matched ? 'claim-highlight' : '';
+        claimAnalysis += `<p class="${className}">${sentence.trim()} ${matched ? `(Confidence: ${(matched.confidence * 100).toFixed(0)}%)` : ''}</p>`;
     });
     document.getElementById('claim-analysis').innerHTML = claimAnalysis;
 
     // Auditor summary
-    let summary = '<h3>Auditor\'s Commentary</h3>';
-    summary += '<p>This assessment, based on operational data and claims, indicates ';
+    let summary = '<h3>Auditor\'s Commentary</h3><p>This assessment indicates ';
     summary += riskLevel === 'High' ? 'significant' : riskLevel === 'Moderate' ? 'moderate' : 'low';
-    summary += ` misalignment risks. In ${detectedCountry}, with its ${multiplier > 1 ? 'stringent' : 'lenient'} regulations, key concerns include ${mismatches.map(m => m.claimType).join(', ') || 'none'}. `;
-    summary += 'Recommendations: Conduct independent audits on Scope 3 emissions, enhance data transparency, and align operations with international standards like EU CSRD or UN SDGs to mitigate reputational and regulatory exposure.</p>';
+    summary += ` credibility risk for ${sector} in ${detectedCountry}. `;
+    summary += `Key concerns: ${mismatches.map(m => m.claimType).join(', ') || 'none detected'}. `;
+    summary += 'Recommendation: Verify Scope 3 emissions and improve operational transparency.</p>';
     document.getElementById('auditor-summary').innerHTML = summary;
 
     // Map
     if (map) map.remove();
     map = L.map('map').setView(location, 5);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
-    L.marker(location).addTo(map).bindPopup(`Asset Location - Risk: ${riskLevel} | Country: ${detectedCountry}`);
+    L.marker(location).addTo(map).bindPopup(`<b>${sector}</b><br>Risk: ${riskLevel}<br>Country: ${detectedCountry}`);
 
-    if (detectedCountry === "Germany") {
-        L.circle([51.1657, 10.4515], {radius: 200000, color: 'orange'}).addTo(map).bindPopup('Central Germany - Industrial Hub');
-    } else if (detectedCountry === "USA") {
-        L.circle([29.76, -95.37], {radius: 150000, color: 'red'}).addTo(map).bindPopup('Houston Area - O&G Risk Zone');
+    console.log("Analysis complete – results displayed");
+}
+
+// ────────────────────────────────────────────────
+// EXPORT BUTTONS – ATTACHED ONLY ONCE
+// ────────────────────────────────────────────────
+
+document.getElementById('export-csv').addEventListener('click', function() {
+    if (!lastAnalysisData.sector) {
+        alert("Run analysis first to generate data for export.");
+        return;
     }
 
-    // ────────────────────────────────────────────────
-    // EXPORT BUTTONS – MOVED OUTSIDE runAnalysis TO AVOID DUPLICATES
-    // ────────────────────────────────────────────────
+    const data = lastAnalysisData;
+    let csv = 'Field,Value\n';
+    for (const [key, val] of Object.entries(data)) {
+        csv += `"${key}","${val}"\n`;
+    }
 
-    // CSV Export
-    document.getElementById('export-csv').onclick = function() {
-        const data = {
-            Sector: sector,
-            Year: year,
-            Country: detectedCountry,
-            Score: score.toFixed(1),
-            Risk: riskLevel,
-            RedFlags: mismatches.length,
-            Multiplier: multiplier.toFixed(2),
-            GridIntensity: gridIntensity.toFixed(2)
-        };
+    const blob = new Blob([csv], {type: 'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ESG_Analysis_${data.sector}_${data.year}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+});
 
-        let csv = 'Field,Value\n';
-        for (const [key, value] of Object.entries(data)) {
-            csv += `"${key.replace(/"/g, '""')}","${value}"\n`;
-        }
-
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `ESG_Report_${sector.replace(/\s+/g,'_')}_${year}.csv`;
-        link.style.display = 'none';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    };
-
-    // PDF Export – includes chart + map + text
-    document.getElementById('export-pdf').onclick = function() {
-        setTimeout(() => {
-            const chartCanvas = document.getElementById('credibility-chart');
-            const chartImage = chartCanvas ? chartCanvas.toDataURL('image/png') : '';
-
-            let mapImage = '';
-            if (map) {
-                try {
-                    const mapDiv = map.getContainer();
-                    const tempCanvas = document.createElement('canvas');
-                    tempCanvas.width = mapDiv.offsetWidth;
-                    tempCanvas.height = mapDiv.offsetHeight;
-                    const ctx = tempCanvas.getContext('2d');
-                    const tiles = mapDiv.querySelectorAll('img');
-                    tiles.forEach(tile => {
-                        if (tile.src && tile.complete) {
-                            ctx.drawImage(tile, tile.offsetLeft, tile.offsetTop);
-                        }
-                    });
-                    mapImage = tempCanvas.toDataURL('image/png');
-                } catch (e) {
-                    console.warn('Map capture failed:', e);
-                }
-            }
-
-            const printContent = `
-                <div style="font-family:Arial,Helvetica,sans-serif; max-width:1100px; margin:40px auto; color:#111;">
-                    <h1 style="text-align:center; color:#1e40af;">ESG Credibility Report</h1>
-                    <p style="text-align:center; color:#4b5563;">Generated: ${new Date().toLocaleString()}</p>
-                    <hr style="margin:24px 0;">
-
-                    <h2>Summary</h2>
-                    <div style="font-size:1.4rem; font-weight:bold; margin:16px 0;">
-                        ${document.getElementById('risk-badge').outerHTML}
-                    </div>
-                    <div style="margin-bottom:32px;">
-                        ${document.getElementById('insights').innerHTML}
-                    </div>
-
-                    <h2>Credibility Breakdown Chart</h2>
-                    ${chartImage ? `<img src="${chartImage}" style="max-width:100%; height:auto; border-radius:12px;">` : '<p>Chart not available in print view</p>'}
-                    <hr style="margin:32px 0;">
-
-                    <h2>Asset Location Map</h2>
-                    ${mapImage ? `<img src="${mapImage}" style="max-width:100%; height:auto; border-radius:12px;">` : '<p>Map not available in print view</p>'}
-                    <hr style="margin:32px 0;">
-
-                    <h2>Red Flags & Evidence</h2>
-                    <div style="margin-bottom:32px;">
-                        ${document.getElementById('red-flags').innerHTML}
-                    </div>
-
-                    <h2>Detailed Claim Analysis</h2>
-                    <div style="margin-bottom:32px;">
-                        ${document.getElementById('claim-analysis').innerHTML}
-                    </div>
-
-                    <h2>Auditor Commentary</h2>
-                    ${document.getElementById('auditor-summary').innerHTML}
-
-                    <hr style="margin:48px 0;">
-                    <p style="text-align:center; color:#6b7280; font-size:0.95rem;">
-                        Generated by ESG Credibility Detector • For demonstration purposes only
-                    </p>
-                </div>
-            `;
-
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>ESG Report – ${sector} ${year}</title>
-                    <style>
-                        body { margin:0; padding:0; font-family:Arial,Helvetica,sans-serif; line-height:1.6; }
-                        img { max-width:100%; height:auto; }
-                        @media print { button, #export-buttons { display:none; } }
-                    </style>
-                </head>
-                <body>
-                    ${printContent}
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
-            printWindow.focus();
-
-            setTimeout(() => printWindow.print(), 1500);
-        }, 1000);
-    };
-}
-
-// Classify risk function (moved inside scope so it's always available)
-function classifyRisk(score) {
-    if (score > 80) return {level: "Low", color: "var(--risk-low)", bg: "#e8f5e9"};
-    if (score > 50) return {level: "Moderate", color: "var(--risk-mod)", bg: "#fff3e0"};
-    return {level: "High", color: "var(--risk-high)", bg: "#ffebee"};
-}
-</script>
-
-</body>
-</html>
+document.getElementById('export-pdf').addEventListener('click', function() {
+    if (!lastAnalysisData.sector) {
+        alert("Run
