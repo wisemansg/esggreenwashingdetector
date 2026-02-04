@@ -1,5 +1,7 @@
 # 🌱 ESG Greenwashing Detection & Credibility Assessment System
 
+![Pig 0](ESGCA0.png)
+
 ## 📌 Comprehensive System Documentation
 
 ## 🧭 1. System Overview
