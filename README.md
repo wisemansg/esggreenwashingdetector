@@ -68,6 +68,18 @@ Instead, it functions as a **risk-screening and credibility-alignment tool**.
 
 ## 🧩 5. Inputs Explained (For All Audiences)
 
+## Pig 1
+![Pig 1](ESGCA1.png)
+
+## Pig 2
+![Pig 2](ESGCA2.png)
+
+## Pig 3
+![Pig 3](ESGCA3.png)
+
+## Pig 4
+![Pig 4](ESGCA4.png)
+
 ### 🏭 5.1 Company Sector
 
 The sector input defines the **baseline expectations** for operations, emissions intensity, asset behavior, and risk.
