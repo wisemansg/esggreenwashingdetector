@@ -1,4 +1,4 @@
-#  ESG Greenwashing Detection & Credibility Assessment System 🌱
+#  ESG Greenwashing Detection and Credibility Assessment System 🌱
 
 ![Fig 0](https://raw.githubusercontent.com/wisemansg/esggreenwashingdetector/main/assets/ESGCA0.png)
 
