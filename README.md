@@ -1,5 +1,20 @@
 #  ESG Greenwashing Detection and Credibility Assessment System 🌱
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white" />
+  <img src="https://img.shields.io/badge/Pandas-150458?logo=pandas&logoColor=white" />
+  <img src="https://img.shields.io/badge/NumPy-013243?logo=numpy&logoColor=white" />
+  <img src="https://img.shields.io/badge/Plotly-3F4F75?logo=plotly&logoColor=white" />
+  <img src="https://img.shields.io/badge/NLP-4B0082?logo=openai&logoColor=white" />
+  <img src="https://img.shields.io/badge/Explainable%20AI-008080?logo=ai&logoColor=white" />
+  <img src="https://img.shields.io/badge/ESG%20Analytics-228B22?logo=leaflet&logoColor=white" />
+  <img src="https://img.shields.io/badge/Risk%20Assessment-B22222?logo=databricks&logoColor=white" />
+  <img src="https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white" />
+</p>
+
+---
+
 ![Fig 0](https://raw.githubusercontent.com/wisemansg/esggreenwashingdetector/main/assets/ESGCA0.png)
 
 ## 📌 Comprehensive System Documentation
