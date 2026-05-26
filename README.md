@@ -1,6 +1,6 @@
-# 🌱 ESG Greenwashing Detection & Credibility Assessment System
+#  ESG Greenwashing Detection & Credibility Assessment System 🌱
 
-![Pig 0](ESGCA0.png)
+![Fig 0](https://raw.githubusercontent.com/wisemansg/esggreenwashingdetector/main/assets/ESGCA0.png)
 
 ## 📌 Comprehensive System Documentation
 
@@ -70,17 +70,17 @@ Instead, it functions as a **risk-screening and credibility-alignment tool**.
 
 ## 🧩 5. Inputs Explained (For All Audiences)
 
-## Pig 1
-![Pig 1](ESGCA1.png)
+## Fig 1
+![Fig 1](https://raw.githubusercontent.com/wisemansg/esggreenwashingdetector/main/assets/ESGCA1.png)
 
-## Pig 2
-![Pig 2](ESGCA2.png)
+## Fig 2
+![Fig 2](https://raw.githubusercontent.com/wisemansg/esggreenwashingdetector/main/assets/ESGCA2.png)
 
-## Pig 3
-![Pig 3](ESGCA3.png)
+## Fig 3
+![Fig 3](https://raw.githubusercontent.com/wisemansg/esggreenwashingdetector/main/assets/ESGCA3.png)
 
-## Pig 4
-![Pig 4](ESGCA4.png)
+## Fig 4
+![Fig 4](https://raw.githubusercontent.com/wisemansg/esggreenwashingdetector/main/assets/ESGCA4.png)
 
 ### 🏭 5.1 Company Sector
 
